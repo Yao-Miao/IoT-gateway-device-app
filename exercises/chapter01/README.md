@@ -20,7 +20,7 @@ At first, check the git, python, and pip version in my system, make sure they al
 
 NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
 
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/tree/alpha001
 
 ### UML Design Diagram(s)
 
