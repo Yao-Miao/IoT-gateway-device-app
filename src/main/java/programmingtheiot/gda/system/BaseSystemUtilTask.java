@@ -42,8 +42,10 @@ public abstract class BaseSystemUtilTask
 	}
 	
 	public float getTelemetryValue()
-	{
-		return 0.0f;
+	{	
+		float val = getSystemUtil();
+		//_Logger.info("The method <getSystemUtil> get a value: " + val);
+		return val;
 	}
 	
 	
