@@ -30,11 +30,13 @@ public class SystemCpuUtilTask extends BaseSystemUtilTask
 	
 	
 	// protected methods
+	// get CPU utilization
 	
 	@Override
 	protected float getSystemUtil()
 	{
-		float val = (float)ManagementFactory.getOperatingSystemMXBean().getSystemLoadAverage();
+		
+		float val = (float)ManagementFactory.getOperatingSystemMXBean().getSystemLoadAverage() * 100;
 		return val;
 	}
 	

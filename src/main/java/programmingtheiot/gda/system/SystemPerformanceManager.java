@@ -33,6 +33,7 @@ public class SystemPerformanceManager
 	private ScheduledExecutorService schedExecSvc = null;
 	private SystemCpuUtilTask cpuUtilTask = null;
 	private SystemMemUtilTask memUtilTask = null;
+	//private SystemRtMemUtilTask rtMemUtilTask = null;  -- delete by yao miao. this syntax is used to get runtime memory utilization
 
 	private Runnable taskRunner = null;
 	private boolean isStarted = false;
@@ -62,6 +63,8 @@ public class SystemPerformanceManager
 		this.schedExecSvc = Executors.newScheduledThreadPool(1);
 		this.cpuUtilTask = new SystemCpuUtilTask();
 		this.memUtilTask = new SystemMemUtilTask();
+		//this.rtMemUtilTask = new SystemRtMemUtilTask(); -- delete by yao miao. this syntax is to get runtime memory utilization
+		
 
 		this.taskRunner = () -> {
 		    this.handleTelemetry();
@@ -71,19 +74,23 @@ public class SystemPerformanceManager
 	
 	// public methods
 	
+	//Call getTelemetryValue() method to get the CPU utilization and memory utilization. Logs the values of self.cpuUtilPct and self.memUtilPct
+	
 	public void handleTelemetry()
 	{
 		float cpuUtilPct = this.cpuUtilTask.getTelemetryValue();
 		float memUtilPct = this.memUtilTask.getTelemetryValue();
+		//float rtMemUtilPct = this.rtMemUtilTask.getTelemetryValue(); -- delete by yao miao. this syntax is to get runtime memory utilization
 		
-		//_Logger.info("CPU utilization is " + cpuUtilPct +  " percent, and memory utilization is " + memUtilPct + " percent.");
-		_Logger.info("Handle telemetry results: cpuUtil=" + cpuUtilPct + ", memUtil=" + memUtilPct);
+		_Logger.info("CPU utilization is " + cpuUtilPct +  " percent, and memory utilization is " + memUtilPct + " percent.");
+		//_Logger.info("Handle telemetry results: cpuUtil=" + cpuUtilPct + ", memUtil=" + memUtilPct + "%");
 	}
 	
 	public void setDataMessageListener(IDataMessageListener listener)
 	{
 	}
 	
+	//Start the System Performance Manager. Start ScheduledExecutorService. Switch isStarted to true.
 	public void startManager()
 	{
 		_Logger.info("SystemPerformanceManager is starting");
@@ -93,7 +100,7 @@ public class SystemPerformanceManager
 		    this.isStarted = true;
 		}
 	}
-	
+	//Start the System Performance Manager. Shutdown ScheduledExecutorService.
 	public void stopManager()
 	{
 		this.schedExecSvc.shutdown();

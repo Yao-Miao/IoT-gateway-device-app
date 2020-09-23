@@ -30,12 +30,14 @@ public class SystemMemUtilTask extends BaseSystemUtilTask
 	
 	
 	// protected methods
+	// get memory utilization
 	
 	@Override
 	protected float getSystemUtil()
 	{
 		MemoryUsage memUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-		double val = (double)memUsage.getUsed() / (double)memUsage.getCommitted();
+		double val = (double)memUsage.getUsed() / (double)memUsage.getMax() * 100;
+		
 		return (float)val;
 	}
 	
