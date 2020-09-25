@@ -39,7 +39,5 @@ Main Branch URL:https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-Myron
 
 - GatewayDeviceAppTest
 - SystemPerformanceManagerTest
-- GatewayDeviceAppTest
-- GatewayDeviceAppTest
 
 EOF.
