@@ -42,52 +42,68 @@ public class SystemStateData extends BaseIotData implements Serializable
     private List<SensorData> sensorDataList = null;
     
     
-	// constructors
+    
+    
+	// constructors: initializing the class
 	
 	public SystemStateData()
 	{
 		super();
+		sysPerfDataList = new ArrayList<>();
+		sensorDataList = new ArrayList<>();
 	}
 	
 	
 	// public methods
 	
+	// add SensorData instance into the sensorDataList
 	public boolean addSensorData(SensorData data)
 	{
-		return false;
+		sensorDataList.add(data);
+		return true;
 	}
 	
+	// add SystemPerformanceData instance into the sysPerfDataList
 	public boolean addSystemPerformanceData(SystemPerformanceData data)
 	{
-		return false;
+		sysPerfDataList.add(data);
+		return true;
 	}
 	
+	// get the actionCmd 
 	public int getActionCommand()
 	{
-		return 0;
+		return this.actionCmd;
 	}
 	
+	// get the location 
 	public String getLocation()
 	{
-		return null;
+		return this.location;
 	}
 	
+	// get the sensorDataList 
 	public List<SensorData> getSensorDataList()
 	{
-		return null;
+		return this.sensorDataList;
 	}
 	
+	// get the sysPerfDataList 
 	public List<SystemPerformanceData> getSystemPerformanceDataList()
 	{
-		return null;
+		return this.sysPerfDataList;
 	}
 	
+	// set the actionCmd 
 	public void setActionCommand(int actionCmd)
 	{
+		this.actionCmd = actionCmd;
 	}
 	
+	// set the location 
 	public void setLocation(String location)
 	{
+		this.location = location;
 	}
 	
 	
@@ -106,6 +122,11 @@ public class SystemStateData extends BaseIotData implements Serializable
 	 */
 	protected void handleUpdateData(BaseIotData data)
 	{
+		SystemStateData ssd = (SystemStateData) data;
+		this.actionCmd = ssd.getActionCommand();
+		this.location = ssd.getLocation();
+		this.sensorDataList = new ArrayList<SensorData>(ssd.getSensorDataList());
+		this.sysPerfDataList = new ArrayList<SystemPerformanceData>(ssd.getSystemPerformanceDataList());
 	}
 	
 }

@@ -80,7 +80,7 @@ public class SystemCpuUtilTaskTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.system.SystemCpuUtilTask#generateTelemetry()}.
 	 */
-	//@Test
+	@Test
 	public void testGenerateTelemetry()
 	{
 		SensorData sd = this.cpuUtilTask.generateTelemetry();
@@ -108,6 +108,8 @@ public class SystemCpuUtilTaskTest
 		cpuUtil = this.cpuUtilTask.getTelemetryValue();
 		
 		for (int i = 1; i <= totTests; i++) {
+			
+			
 			if (cpuUtil >= 0.0f) {
 				_Logger.info("Test " + i + ": CPU Util: " + cpuUtil);
 				assertTrue(cpuUtil >= 0.0f);

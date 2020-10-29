@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * Shell representation of class for student implementation.
- *
+ * The class that restores the Sensor Data
  */
 public class SensorData extends BaseIotData implements Serializable
 {
@@ -23,29 +23,42 @@ public class SensorData extends BaseIotData implements Serializable
 
 	// private var's
 	
+	private float value;
+	private int sensorType = DEFAULT_SENSOR_TYPE;
     
-	// constructors
+	// constructors: initializing the class
 	
 	public SensorData()
 	{
 		super();
+		
 	}
 	
 	public SensorData(int sensorType)
 	{
 		super();
+		this.sensorType = sensorType;
 	}
 	
 	
 	// public methods
 	
+	//get the value variable
 	public float getValue()
 	{
-		return 0.0f;
+		return this.value;
 	}
 	
+	//get the sensorType variable
+	public int getSensorType() 
+	{
+		return this.sensorType;
+	}
+	
+	//set the value variable
 	public void setValue(float val)
 	{
+		this.value = val;
 	}
 	
 	
@@ -54,8 +67,12 @@ public class SensorData extends BaseIotData implements Serializable
 	/* (non-Javadoc)
 	 * @see programmingtheiot.data.BaseIotData#handleUpdateData(programmingtheiot.data.BaseIotData)
 	 */
+	// handle the update action
 	protected void handleUpdateData(BaseIotData data)
-	{
+	{	
+		SensorData sd = (SensorData)data;
+		this.value = sd.getValue();
+		this.sensorType = sd.getSensorType();
 	}
 	
 }

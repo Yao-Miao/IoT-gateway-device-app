@@ -24,26 +24,42 @@ public abstract class BaseSystemUtilTask
 	
 	
 	// private
+	private SensorData latestSensorData = null;
 	
-	
-	// constructors
+	// constructors: initializing the class
 	
 	public BaseSystemUtilTask()
 	{
 		super();
+		
+		
 	}
 	
 	
 	// public methods
 	
+	/**
+	 * Generate The Telemetry
+	 * @return SensorData
+	 */
 	public SensorData generateTelemetry()
 	{
-		return null;
+		this.latestSensorData = new SensorData();
+		float val = getSystemUtil();
+		this.latestSensorData.setValue(val);
+		return this.latestSensorData;
 	}
 	
+	/**
+	 * Get The Telemetry Value
+	 * @return float
+	 */
 	public float getTelemetryValue()
 	{	
-		float val = getSystemUtil();
+		if(this.latestSensorData == null) {
+			this.latestSensorData = this.generateTelemetry();
+		}
+		float val = this.latestSensorData.getValue();
 		//_Logger.info("The method <getSystemUtil> get a value: " + val);
 		return val;
 	}

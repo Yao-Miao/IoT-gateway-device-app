@@ -35,7 +35,7 @@ public abstract class BaseIotData implements Serializable
     private long    timeStampMillis = 0L;
 
     
-	// constructors
+    // constructors: initializing the class
 	
 	/**
 	 * Default.
@@ -49,51 +49,67 @@ public abstract class BaseIotData implements Serializable
 	
 	// public methods
 	
+	// get the name
 	public String getName()
 	{
-		return null;
+		return this.name;
 	}
-	
+	// get the StateData
 	public String getStateData()
 	{
 		return null;
 	}
 	
+	// get the statusCode
 	public int getStatusCode()
 	{
-		return 0;
+		return this.statusCode;
 	}
 	
+	// get the timeStamp
 	public String getTimeStamp()
 	{
-		return null;
+		return this.timeStamp;
 	}
 	
+	// get the timeStampMillis
 	public long getTimeStampMillis()
 	{
-		return 0L;
+		return this.timeStampMillis;
 	}
 	
+	// get the hasError
 	public boolean hasError()
 	{
-		return false;
+		return this.hasError;
 	}
 	
+	// set the name
 	public void setName(String name)
 	{
+		this.name = name;
 	}
 	
+	// set the StateData
 	public void setStateData(String data)
 	{
 	}
 	
+	// set the statusCode
 	public void setStatusCode(int code)
 	{
+		this.statusCode = code;
 	}
+	
 	
 	public void updateData(BaseIotData data)
 	{
 		// TODO: update local var's
+		this.name = data.getName();
+		this.hasError = data.hasError();
+		this.statusCode = data.getStatusCode();
+		this.timeStamp = data.getTimeStamp();
+		this.timeStampMillis = data.getTimeStampMillis();
 		
 		handleUpdateData(data);
 	}

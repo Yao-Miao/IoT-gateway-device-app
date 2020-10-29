@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * Shell representation of class for student implementation.
- *
+ * The class that restores the System Performance Data
  */
 public class SystemPerformanceData extends BaseIotData implements Serializable
 {
@@ -20,9 +20,12 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	
 	
 	// private var's
-	
+	private float cpuUtil;
+	private float diskUtil;
+	private float memoryUtil;
+		
     
-	// constructors
+	// constructors: initializing the class
 	
 	public SystemPerformanceData()
 	{
@@ -32,31 +35,40 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	
 	// public methods
 	
+	//get the cpuUtil: CPU utilization
 	public float getCpuUtilization()
 	{
-		return 0.0f;
+		return this.cpuUtil;
 	}
 	
+	//get the diskUtil: Disk utilization
 	public float getDiskUtilization()
 	{
-		return 0.0f;
+		return this.diskUtil;
 	}
 	
+	//get the memoryUtil: Memory utilization
 	public float getMemoryUtilization()
 	{
-		return 0.0f;
+		return this.memoryUtil;
 	}
 	
+	//set the cpuUtil: CPU utilization
 	public void setCpuUtilization(float val)
 	{
+		this.cpuUtil = val;
 	}
 	
+	//set the diskUtil: Disk utilization
 	public void setDiskUtilization(float val)
 	{
+		this.diskUtil = val;
 	}
 	
+	//set the memoryUtil: Memory utilization
 	public void setMemoryUtilization(float val)
 	{
+		this.memoryUtil = val;
 	}
 	
 	
@@ -75,6 +87,10 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	 */
 	protected void handleUpdateData(BaseIotData data)
 	{
+		SystemPerformanceData sysd = (SystemPerformanceData) data;
+		this.cpuUtil = sysd.getCpuUtilization();
+		this.diskUtil = sysd.getDiskUtilization();
+		this.memoryUtil= sysd.getMemoryUtilization();
 	}
 	
 }
