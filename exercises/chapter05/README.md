@@ -24,7 +24,7 @@ URL: https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/tree
 
 ### UML Design Diagram(s)
 
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![GDA_UML](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter05/exercises/chapter05/GDA.jpg).
 
 
 ### Unit Tests Executed
