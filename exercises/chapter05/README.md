@@ -2,48 +2,47 @@
 
 ## Lab Module 05
 
-Be sure to implement all the PIOT-GDA-* issues (requirements) listed at [PIOT-INF-05-001 - Chapter 05](https://github.com/orgs/programming-the-iot/projects/1#column-10488421).
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+
+Build data management and transformation capabilities into GDA by building a converter to serialize and de-serialize your data wrappers to / from JSON. Build a local storage capability into your GDA using Redis. Make GDA (Java) support JSON serialization.
 
 How does your implementation work?
 
+1.	Create Java modules that will contain the sensor and actuator data: SensorData, ActuatorData, SystemPerformanceData, and SystemStateData. These will all be derived from BaseIotData.
+2.	Create a new / edit the existing Java class named DataUtil with class name DataUtil
+3.	Update the BaseSystemUtilTask class to support telemetry generation using the SensorData type.
+4.	Create a new Java class named DeviceDataManager in the programmingtheiot.gda.app package.
+5.	Create an instance of DeviceDataManager within GatewayDeviceApp and invoke the manager's start / stop methods within the app's start / stop methods.
+
+
 ### Code Repository and Branch
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
-
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/tree/chapter05
 
 ### UML Design Diagram(s)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
 book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
+- ActuatorDataTest
+- SensorDataTest
+- SystemPerformanceDataTest
+- SystemStateDataTest
+- DataUtilTest
+- SystemCpuUtilTaskTest
+- SystemMemUtilTaskTest
 
-- 
-- 
-- 
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
+- DataIntegrationTest
+- DeviceDataManagerNoCommsTest
+- GatewayDeviceAppTest
 
-- 
-- 
-- 
 
 EOF.
