@@ -97,6 +97,7 @@ public class DeviceDataManager implements IDataMessageListener
 	
 	// public methods
 	
+	// these will be used as callback methods and the implement the IDataMessageListener interface you imported.
 	@Override
 	public boolean handleActuatorCommandResponse(ResourceNameEnum resourceName, ActuatorData data)
 	{
@@ -104,6 +105,7 @@ public class DeviceDataManager implements IDataMessageListener
 		return false;
 	}
 
+	// these will be used as callback methods and the implement the IDataMessageListener interface you imported.
 	@Override
 	public boolean handleIncomingMessage(ResourceNameEnum resourceName, String msg)
 	{
@@ -111,6 +113,7 @@ public class DeviceDataManager implements IDataMessageListener
 		return false;
 	}
 
+	// these will be used as callback methods and the implement the IDataMessageListener interface you imported.
 	@Override
 	public boolean handleSensorMessage(ResourceNameEnum resourceName, SensorData data)
 	{
@@ -118,6 +121,7 @@ public class DeviceDataManager implements IDataMessageListener
 		return false;
 	}
 
+	// these will be used as callback methods and the implement the IDataMessageListener interface you imported.
 	@Override
 	public boolean handleSystemPerformanceMessage(ResourceNameEnum resourceName, SystemPerformanceData data)
 	{
@@ -149,6 +153,7 @@ public class DeviceDataManager implements IDataMessageListener
 	 */
 	private void initConnections()
 	{
+		
 	}
 	
 }

@@ -41,6 +41,7 @@ defaultQoS     = 0
 keepAlive      = 30
 enableCrypt    = False
 
+
 #
 # CoAP client and server configuration information
 #
@@ -65,3 +66,14 @@ enableSmtpClient        = False
 enablePersistenceClient = False
 testGdaDataPath = /tmp/gda-data
 testCdaDataPath = /tmp/cda-data
+
+#
+# Persistence client configuration information
+#
+[Data.GatewayService]
+credFile = ./cred/PiotPersistenceCred.props
+host = localhost
+port = 6379
+enableCrypt = False
+
+

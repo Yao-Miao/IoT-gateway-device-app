@@ -22,6 +22,7 @@ import programmingtheiot.data.ActuatorData;
 import programmingtheiot.data.DataUtil;
 import programmingtheiot.data.SensorData;
 import programmingtheiot.data.SystemPerformanceData;
+import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
@@ -37,7 +38,11 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 		Logger.getLogger(RedisPersistenceAdapter.class.getName());
 	
 	// private var's
-	
+	private String host;
+	private int port;
+	//private Client jedisClient;
+	private Jedis jedisClient;
+	private DataUtil dataUtil;
 	
 	// constructors
 	
@@ -48,6 +53,11 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	public RedisPersistenceAdapter()
 	{
 		super();
+		ConfigUtil configUtil = ConfigUtil.getInstance();
+		this.host = configUtil.getProperty(ConfigConst.DATA_GATEWAY_SERVICE, ConfigConst.HOST_KEY);
+		this.port = configUtil.getInteger(ConfigConst.DATA_GATEWAY_SERVICE, ConfigConst.PORT_KEY);
+		this.jedisClient = new Jedis(host, port);
+		this.dataUtil = DataUtil.getInstance();
 		
 		initClient();
 	}
@@ -58,25 +68,54 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	@Override
 	public boolean connectClient()
 	{
-		return false;
+		boolean isConnected = jedisClient.isConnected();
+		if(isConnected) {
+			_Logger.info("The jedis is already connected");
+		}else {
+			_Logger.info("Connecting.....");
+			jedisClient.connect();
+			_Logger.info("The jedis is already connected");
+			
+		}
+		return true;
 	}
 
 	@Override
 	public boolean disconnectClient()
 	{
-		return false;
+		boolean isConnected = jedisClient.isConnected();
+		if(!isConnected) {
+			_Logger.info("The jedis is already disconnected");
+		}else {
+			_Logger.info("Disconnecting.....");
+			jedisClient.disconnect();
+			_Logger.info("The jedis is already disconnected");
+			
+		}
+		return true;
 	}
 
 	@Override
 	public ActuatorData[] getActuatorData(String topic, Date startDate, Date endDate)
 	{
-		return null;
+		List<ActuatorData> list = new ArrayList<>();
+		String adJson = jedisClient.get(topic);
+		
+		ActuatorData ad = dataUtil.jsonToActuatorData(adJson);
+		list.add(ad);
+		ActuatorData[] ActuatorDataArr = (ActuatorData[]) list.toArray();
+		return ActuatorDataArr;
 	}
 
 	@Override
 	public SensorData[] getSensorData(String topic, Date startDate, Date endDate)
 	{
-		return null;
+		List<SensorData> list = new ArrayList<>();
+		String sdJson = jedisClient.get(topic);
+		SensorData sd = dataUtil.jsonToSensorData(sdJson);
+		list.add(sd);
+		SensorData[] SensorDataArr = (SensorData[]) list.toArray();
+		return SensorDataArr;
 	}
 
 	@Override
