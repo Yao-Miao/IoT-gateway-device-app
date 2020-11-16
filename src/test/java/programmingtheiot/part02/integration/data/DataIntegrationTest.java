@@ -31,6 +31,8 @@ import programmingtheiot.data.DataUtil;
 import programmingtheiot.data.ActuatorData;
 import programmingtheiot.data.SensorData;
 import programmingtheiot.data.SystemPerformanceData;
+import programmingtheiot.gda.system.SystemCpuUtilTask;
+import programmingtheiot.gda.system.SystemMemUtilTask;
 
 /**
  * This test case class contains very basic integration tests for
@@ -173,7 +175,19 @@ public class DataIntegrationTest
 		
 		try {
 			Path   filePath = FileSystems.getDefault().getPath(fileName);
-			String dataStr  = DataUtil.getInstance().systemPerformanceDataToJson(new SystemPerformanceData());
+			
+			//delete by miaoyao@11/07/2020
+			//String dataStr  = DataUtil.getInstance().systemPerformanceDataToJson(new SystemPerformanceData());
+			
+			//add by miaoyao: inorder to set CpuUtilization and MemoryUtilization
+			SystemCpuUtilTask cpuUtilTask = new SystemCpuUtilTask();
+			SystemMemUtilTask memUtilTask = new SystemMemUtilTask();
+			SystemPerformanceData spd = new SystemPerformanceData();
+			spd.setCpuUtilization(cpuUtilTask.getTelemetryValue());
+			spd.setMemoryUtilization(memUtilTask.getTelemetryValue());
+			
+			
+			String dataStr  = DataUtil.getInstance().systemPerformanceDataToJson(spd);
 			
 			_Logger.info("Sample SystemPerformanceData JSON (validated): " + dataStr);
 			_Logger.info("Writing SystemPerformanceData JSON to GDA data path: " + filePath);

@@ -159,7 +159,7 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 * @param qos the quality of service level to use.
 	 */
 	public boolean publishMessage(ResourceNameEnum topicName, String msg, int qos)
-	{	_Logger.info("The function publishMessage is called");
+	{	_Logger.info("The function publishMessage is called-> msg:" + msg);
 		String topic = topicName.getResourceName();
 		byte[] payload = msg.getBytes();
 		
