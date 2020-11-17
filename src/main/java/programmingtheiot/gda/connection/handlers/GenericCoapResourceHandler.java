@@ -32,7 +32,7 @@ public class GenericCoapResourceHandler extends CoapResource
 		Logger.getLogger(GenericCoapResourceHandler.class.getName());
 	
 	// params
-	
+	private IDataMessageListener dataMsgListener = null;
 	
 	// constructors
 	
@@ -67,11 +67,35 @@ public class GenericCoapResourceHandler extends CoapResource
 	@Override
 	public void handleGET(CoapExchange context)
 	{
+		// TODO: validate 'context'
+	    
+	    // accept the request
+	    context.accept();
+	    
+	    // TODO: retrieve the requested data and generate a response message: 'msg'
+	    String msg = ""; // fill this in
+	    
+	    // send an appropriate response
+	    context.respond(ResponseCode.VALID, msg);
+	    
 	}
 	
 	@Override
 	public void handlePOST(CoapExchange context)
 	{
+		// TODO: validate 'context'
+	    
+	    // accept the request
+	    context.accept();
+	    
+	    // TODO: create (or update) the resource with the payload
+	    String payload = context.getRequestText();
+	    
+	    // TODO: generate a response message: 'msg'
+	    String msg = ""; // fill this in
+	    
+	    // send an appropriate response
+	    context.respond(ResponseCode.CREATED, msg);
 	}
 	
 	@Override
