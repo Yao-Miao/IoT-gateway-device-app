@@ -145,20 +145,24 @@ public class DeviceDataManager implements IDataMessageListener
 	public void startManager()
 	{
 		_Logger.info("Starting DeviceDataManager...");
+		this.coapServer.startServer();
 		this.sysPerfManager.startManager();
 		if(this.enableMqttClient) {
 			this.mqttClient.connectClient();
 		}
+		
 		
 	}
 	
 	// stop the Device Data Manager
 	public void stopManager()
 	{
+		this.coapServer.stopServer();
 		this.sysPerfManager.stopManager();
 		if(this.enableMqttClient) {
 			this.mqttClient.disconnectClient();
 		}
+		
 		
 		_Logger.info("Stopping DeviceDataManager...");
 	}
@@ -176,6 +180,8 @@ public class DeviceDataManager implements IDataMessageListener
 		if(this.enableMqttClient) {
 			this.mqttClient = new MqttClientConnector();
 		}
+		//add by miaoyao@11/16/2020: in order to test python coap connect
+		this.coapServer = new CoapServerGateway();
 	}
 	
 	/**
