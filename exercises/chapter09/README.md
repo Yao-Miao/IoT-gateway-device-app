@@ -23,7 +23,7 @@ How does your implementation work?
 
 ### Code Repository and Branch
 
-URL: 
+URL: https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/tree/chapter09
 
 ### UML Design Diagram(s)
 
