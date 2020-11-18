@@ -102,18 +102,38 @@ public class CoapClientToServerConnectorTest
 	 * 
 	 */
 	@Test
-	public void testGetRequest()
+	public void testConnectAndDiscover()
 	{
-		// TODO: issue request and validate response
-		
-		assertTrue(this.ccc.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, DEFAULT_TIMEOUT));
+		assertTrue(this.ccc.sendDiscoveryRequest(DEFAULT_TIMEOUT));
 	}
 	
 	/**
 	 * 
 	 */
 	@Test
-	public void testPostRequest()
+	public void testGetRequestCon()
+	{
+		// TODO: issue request and validate response
+		
+		assertTrue(this.ccc.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, true, DEFAULT_TIMEOUT));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testGetRequestNon()
+	{
+		// TODO: issue request and validate response
+		
+		assertTrue(this.ccc.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, false, DEFAULT_TIMEOUT));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testPostRequestCon()
 	{
 		// TODO: issue request and validate response
 		
@@ -124,15 +144,32 @@ public class CoapClientToServerConnectorTest
 		
 		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
 		
-		assertTrue(this.ccc.sendPostRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, ssdJson, DEFAULT_TIMEOUT));
-		assertTrue(this.ccc.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, DEFAULT_TIMEOUT));
+		assertTrue(this.ccc.sendPostRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, true, ssdJson, DEFAULT_TIMEOUT));
 	}
 	
 	/**
 	 * 
 	 */
 	@Test
-	public void testPutRequest()
+	public void testPostRequestNon()
+	{
+		// TODO: issue request and validate response
+		
+		int actionCmd = 1;
+		
+		SystemStateData ssd = new SystemStateData();
+		ssd.setActionCommand(actionCmd);
+		
+		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
+		
+		assertTrue(this.ccc.sendPostRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, false, ssdJson, DEFAULT_TIMEOUT));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testPutRequestCon()
 	{
 		// TODO: issue request and validate response
 		
@@ -143,20 +180,47 @@ public class CoapClientToServerConnectorTest
 		
 		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
 		
-		assertTrue(this.ccc.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, ssdJson, DEFAULT_TIMEOUT));
-		assertTrue(this.ccc.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, DEFAULT_TIMEOUT));
+		assertTrue(this.ccc.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, true, ssdJson, DEFAULT_TIMEOUT));
 	}
 	
 	/**
 	 * 
 	 */
 	@Test
-	public void testDeleteRequest()
+	public void testPutRequestNon()
 	{
 		// TODO: issue request and validate response
 		
-		assertTrue(this.ccc.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, DEFAULT_TIMEOUT));
-		assertFalse(this.ccc.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, DEFAULT_TIMEOUT));
+		int actionCmd = 2;
+		
+		SystemStateData ssd = new SystemStateData();
+		ssd.setActionCommand(actionCmd);
+		
+		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
+		
+		assertTrue(this.ccc.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, false, ssdJson, DEFAULT_TIMEOUT));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testDeleteRequestCon()
+	{
+		// TODO: issue request and validate response
+		
+		assertTrue(this.ccc.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, true, DEFAULT_TIMEOUT));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testDeleteRequestNon()
+	{
+		// TODO: issue request and validate response
+		
+		assertTrue(this.ccc.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, false, DEFAULT_TIMEOUT));
 	}
 	
 }
