@@ -6,44 +6,36 @@ Be sure to implement all the PIOT-CDA-* issues (requirements) listed at [PIOT-IN
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+
+Build a robust yet lightweight request/response data communications client into the GDA using CoAP. Prove you can communicate between your GDA and CDA using this protocol and the server you built in Chapter 8. Send CoAP requests (GET, POST, PUT, DELETE) to the GDA CoAP server, and - optionally from the CDA - observe a resource hosted by your GDA using CoAP's observe functionality.
 
 How does your implementation work?
 
-### Code Repository and Branch
+1.	Create a new Java class named CoapClientConnector that implements the IRequestResponse interface.
+2.	Add a custom response handler to process responses from asynchronous requests
+3.	Add DISCOVER functionality to CoapClientConnector
+4.	Add GET functionality to CoapClientConnector
+5.	Add PUT functionality to CoapClientConnector
+6.	Add POST functionality to CoapClientConnector
+7.	Add DELETE functionality to CoapClientConnector
+8.	Create a new Python class named CoapClientConnectorTest to test CoapClientConnector.
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
+### Code Repository and Branch
 
 URL: 
 
 ### UML Design Diagram(s)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![GDA_UML](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter09/exercises/chapter09/GDA.png).
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+- N/A
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
-
-- 
-- 
-- 
+- CoapClientConnectorTest 
 
 EOF.
