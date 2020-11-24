@@ -1,4 +1,4 @@
-# Constrained Device Application (Connected Devices)
+# Gateway Device Application (Connected Devices)
 
 ## Lab Module 09
 
