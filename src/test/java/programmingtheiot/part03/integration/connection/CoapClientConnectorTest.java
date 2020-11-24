@@ -97,7 +97,7 @@ public class CoapClientConnectorTest
 	 * test Connect And Discover :add by miaoyao
 	 ***************************************************************/
 	
-	//@Test
+	@Test
 	public void testConnectAndDiscover()
 	{
 		assertTrue(this.coapClient.sendDiscoveryRequest(DEFAULT_TIMEOUT));
@@ -116,7 +116,7 @@ public class CoapClientConnectorTest
 	 * test Get with CON:add by miaoyao
 	 ***************************************************************/
 	
-	//@Test
+	@Test
 	public void testGetRequestCon()
 	{
 		assertTrue(this.coapClient.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, true, DEFAULT_TIMEOUT));
@@ -133,7 +133,7 @@ public class CoapClientConnectorTest
 	/***************************************************************
 	 * test Get with NON:add by miaoyao
 	 ***************************************************************/
-	//@Test
+	@Test
 	public void testGetRequestNon()
 	{
 		assertTrue(this.coapClient.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, false, DEFAULT_TIMEOUT));
@@ -153,7 +153,7 @@ public class CoapClientConnectorTest
 	 * test Post with CON:add by miaoyao
 	 ***************************************************************/
 
-	//@Test
+	@Test
 	public void testPostRequestCon()
 	{
 		int actionCmd = 2;
@@ -176,7 +176,7 @@ public class CoapClientConnectorTest
 	/***************************************************************
 	 * test Post with NON:add by miaoyao
 	 ***************************************************************/	
-	//@Test
+	@Test
 	public void testPostRequestNon()
 	{
 		int actionCmd = 2;
@@ -224,7 +224,7 @@ public class CoapClientConnectorTest
 	/***************************************************************
 	 * test Put WITH NON:add by miaoyao
 	 ***************************************************************/	
-	//@Test
+	@Test
 	public void testPutRequestNon()
 	{
 		int actionCmd = 2;
@@ -265,7 +265,7 @@ public class CoapClientConnectorTest
 	/***************************************************************
 	 * test Delete WITH NON:add by miaoyao
 	 ***************************************************************/
-	//@Test
+	@Test
 	public void testDeleteRequestNon()
 	{
 		assertTrue(this.coapClient.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, false, DEFAULT_TIMEOUT));
