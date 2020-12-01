@@ -6,44 +6,39 @@ Be sure to implement all the PIOT-GDA-* issues (requirements) listed at [PIOT-IN
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+
+Add intelligent edge messaging using MQTT and / or CoAP to handle various messaging scenarios between the GDA and CDA. Use MQTT and / or CoAP to process sensor messages the CDA and trigger actuation events from both the CDA and GDA.
 
 How does your implementation work?
 
-### Code Repository and Branch
+1.	Update the Java class named MqttClientConnector so it can support TLS encrypted connections to the broker.
+2.	Update MqttClientConnector to subscribe to the CDA's topics related to SensorData messages, SystemPerformanceData messages, and ActuatorData response messages.
+3.	Add functionality to DeviceDataManager to handle incoming CDA messages: SensorData, SystemPerformanceData, and ActuatorData (response messages).
+4.	The sensor and actuator data the GDA processes (and generates) will need to have a name associated with it, in addition to the type value that's already been set previously. In addition to providing consistency with the CDA's data structures, this is to allow mapping into a cloud-based virtualized representation of the device with a later exercise.
+5.	Use the tests written for the CDA and GDA and your two implementations of MqttClientConnector to pass messages between the CDA and GDA.
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
+
+### Code Repository and Branch
 
 URL: 
 
 ### UML Design Diagram(s)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![GDA_UML](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter10/exercises/chapter10/GDA.png).
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
+- ActuatorDataTest
+- SensorDataTest
+- SystemPerformanceDataTest
+- SystemStateDataTest
 
-- 
-- 
-- 
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
-
-- 
-- 
-- 
+- MqttClientConnectorTest
+- DataIntegrationTest
 
 EOF.
