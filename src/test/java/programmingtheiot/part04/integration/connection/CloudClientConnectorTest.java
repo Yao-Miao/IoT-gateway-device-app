@@ -22,7 +22,11 @@ import programmingtheiot.common.ConfigUtil;
 import programmingtheiot.common.DefaultDataMessageListener;
 import programmingtheiot.common.IDataMessageListener;
 import programmingtheiot.common.ResourceNameEnum;
+import programmingtheiot.data.SensorData;
+import programmingtheiot.data.SystemPerformanceData;
 import programmingtheiot.gda.connection.*;
+import programmingtheiot.gda.system.SystemCpuUtilTask;
+import programmingtheiot.gda.system.SystemMemUtilTask;
 
 /**
  * This test case class contains very basic integration tests for
@@ -43,6 +47,8 @@ public class CloudClientConnectorTest
 	// member var's
 	
 	private CloudClientConnector cloudClient = null;
+	private SystemMemUtilTask memUtilTask = null;
+	private SystemCpuUtilTask cpuUtilTask = null;
 	
 	
 	// test setup methods
@@ -55,6 +61,8 @@ public class CloudClientConnectorTest
 	{
 		ConfigUtil.getInstance();
 		this.cloudClient = new CloudClientConnector();
+		this.cpuUtilTask = new SystemCpuUtilTask();
+		this.memUtilTask = new SystemMemUtilTask();
 	}
 	
 	/**
@@ -91,7 +99,7 @@ public class CloudClientConnectorTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.CloudClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
 	 */
-	//@Test
+	@Test
 	public void testPublishAndSubscribe()
 	{
 		int qos = 2;
@@ -100,7 +108,7 @@ public class CloudClientConnectorTest
 		IDataMessageListener listener = new DefaultDataMessageListener();
 		
 		assertTrue(this.cloudClient.connectClient());
-		assertTrue(this.cloudClient.subscribeToTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, qos));
+		assertTrue(this.cloudClient.subscribeToEdgeEvents(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE));
 		
 		try {
 			Thread.sleep(5000);
@@ -108,7 +116,18 @@ public class CloudClientConnectorTest
 			// ignore
 		}
 		
-		assertTrue(this.cloudClient.publishMessage(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the GDA message payload.", qos));
+		SensorData sensorData = new SensorData();
+		sensorData.setName(ConfigConst.TEMP_SENSOR_NAME);
+		sensorData.setValue(21.4f);
+		
+		assertTrue(this.cloudClient.sendEdgeDataToCloud(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, sensorData));
+		
+		SystemPerformanceData sysPerfData = new SystemPerformanceData();
+		sysPerfData.setCpuUtilization(this.cpuUtilTask.getTelemetryValue());
+		sysPerfData.setMemoryUtilization(this.memUtilTask.getTelemetryValue());
+		
+		
+		assertTrue(this.cloudClient.sendEdgeDataToCloud(ResourceNameEnum.GDA_SYSTEM_PERF_MSG_RESOURCE, sysPerfData));
 		
 		try {
 			Thread.sleep(5000);
@@ -116,7 +135,7 @@ public class CloudClientConnectorTest
 			// ignore
 		}
 		
-		assertTrue(this.cloudClient.unsubscribeFromTopic(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE));
+		assertTrue(this.cloudClient.unsubscribeFromEdgeEvents(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE));
 
 		try {
 			Thread.sleep(5000);

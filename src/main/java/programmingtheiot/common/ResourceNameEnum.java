@@ -21,16 +21,27 @@ public enum ResourceNameEnum
 {
 	// static
 	
-	CDA_SENSOR_MSG_RESOURCE(ConfigConst.CDA_SENSOR_DATA_MSG_RESOURCE, false),
-	CDA_ACTUATOR_CMD_RESOURCE(ConfigConst.CDA_ACTUATOR_CMD_MSG_RESOURCE, false),
-	CDA_ACTUATOR_RESPONSE_RESOURCE(ConfigConst.CDA_ACTUATOR_RESPONSE_MSG_RESOURCE, false),
-	CDA_MGMT_STATUS_MSG_RESOURCE(ConfigConst.CDA_MGMT_STATUS_MSG_RESOURCE, false),
-	CDA_SYSTEM_PERF_MSG_RESOURCE(ConfigConst.CDA_SYSTEM_PERF_MSG_RESOURCE, false),
-	CDA_MGMT_STATUS_CMD_RESOURCE(ConfigConst.CDA_MGMT_CMD_MSG_RESOURCE, false),
+	CDA_SENSOR_MSG_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.CONSTRAINED_DEVICE, ConfigConst.SENSOR_MSG, false),
+	CDA_ACTUATOR_CMD_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ACTUATOR_CMD, false),
+	CDA_ACTUATOR_RESPONSE_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.CONSTRAINED_DEVICE, ConfigConst.ACTUATOR_RESPONSE, false),
+	CDA_DISPLAY_RESPONSE_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.CONSTRAINED_DEVICE, ConfigConst.DISPLAY_CMD, false),
+	CDA_MGMT_STATUS_MSG_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.CONSTRAINED_DEVICE, ConfigConst.MGMT_STATUS_MSG, false),
+	CDA_MGMT_STATUS_CMD_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.CONSTRAINED_DEVICE, ConfigConst.MGMT_STATUS_CMD, false),
+	CDA_SYSTEM_PERF_MSG_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.CONSTRAINED_DEVICE, ConfigConst.SYSTEM_PERF_MSG, false),
 	
-	GDA_MGMT_STATUS_MSG_RESOURCE(ConfigConst.GDA_MGMT_STATUS_MSG_RESOURCE, true),
-	GDA_MGMT_STATUS_CMD_RESOURCE(ConfigConst.GDA_MGMT_CMD_MSG_RESOURCE, true),
-	GDA_SYSTEM_PERF_MSG_RESOURCE(ConfigConst.GDA_SYSTEM_PERF_MSG_RESOURCE, true);
+	GDA_MGMT_STATUS_MSG_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.GATEWAY_DEVICE, ConfigConst.MGMT_STATUS_MSG, false),
+	GDA_MGMT_STATUS_CMD_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.GATEWAY_DEVICE, ConfigConst.MGMT_STATUS_CMD, false),
+	GDA_SYSTEM_PERF_MSG_RESOURCE(
+		ConfigConst.PRODUCT_NAME, ConfigConst.GATEWAY_DEVICE, ConfigConst.SYSTEM_PERF_MSG, false);
 	
 	private static final HashMap<String, ResourceNameEnum> _ResourceNameLookupMap = new HashMap<>();
 	
@@ -66,7 +77,10 @@ public enum ResourceNameEnum
 	
 	// private var's
 	
+	private String deviceName = "";
+	private String productName = "";
 	private String resourceName = "";
+	private String resourceType = "";
 	private boolean isLocalToGDA = false;
 	
 	
@@ -75,12 +89,17 @@ public enum ResourceNameEnum
 	/**
 	 * Constructor.
 	 * 
-	 * @param resourceName
+	 * @param productName
+	 * @param deviceName
+	 * @param resourceType
 	 * @param isLocalToGda
 	 */
-	private ResourceNameEnum(String resourceName, boolean isLocalToGda)
+	private ResourceNameEnum(String productName, String deviceName, String resourceType, boolean isLocalToGda)
 	{
-		this.resourceName = resourceName;
+		this.resourceName = productName + "/" + deviceName + "/" + resourceType;
+		this.productName = productName;
+		this.deviceName = deviceName;
+		this.resourceType = resourceType;
 		this.isLocalToGDA = isLocalToGda;
 	}
 	
@@ -91,9 +110,36 @@ public enum ResourceNameEnum
 	 * 
 	 * @return String
 	 */
+	public String getDeviceName()
+	{
+		return this.deviceName;
+	}
+	
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getProductName()
+	{
+		return this.productName;
+	}
+	
+	/**
+	 * 
+	 * @return String
+	 */
 	public String getResourceName()
 	{
 		return this.resourceName;
+	}
+	
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getResourceType()
+	{
+		return this.resourceType;
 	}
 	
 	/**

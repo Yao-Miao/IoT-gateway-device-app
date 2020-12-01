@@ -50,6 +50,9 @@ public class ConfigConst
 	 * Resource and Topic Names
 	 */
 
+	public static final String TEMP_SENSOR_NAME = "TempSensor";
+	
+	public static final String DISPLAY_CMD     = "DisplayCmd";
 	public static final String SENSOR_MSG      = "SensorMsg";
 	public static final String ACTUATOR_CMD    = "ActuatorCmd";
 	public static final String ACTUATOR_RESPONSE = "ActuatorResponse";
@@ -74,6 +77,7 @@ public class ConfigConst
 	
 	public static final String DEFAULT_CONFIG_FILE_NAME = "./config/PiotConfig.props";
 	public static final String DEFAULT_CRED_FILE_NAME   = "./cred/PiotCred.props";
+	public static final String DEFAULT_CLOUD_CONFIG_FILE_NAME = "./config/UbidotsCloudCred.props";
 	
 	public static final int DEFAULT_QOS = 0;
 	
@@ -104,6 +108,9 @@ public class ConfigConst
 	public static final String TO_ADDRESS_KEY       = "toAddr";
 	public static final String TO_MEDIA_ADDRESS_KEY = "toMediaAddr";
 	public static final String TO_TXT_ADDRESS_KEY   = "toTxtAddr";
+	
+	public static final String BASE_URL_KEY         = "baseUrl";
+	public static final String BASE_TOPIC_KEY       = "baseTopic";
 
 	public static final String HOST_KEY             = "host";
 	public static final String PORT_KEY             = "port";
@@ -139,6 +146,9 @@ public class ConfigConst
 	public static final String CPU_UTIL_NAME  = "CpuUtil";
 	public static final String DISK_UTIL_NAME = "DiskUtil";
 	public static final String MEM_UTIL_NAME  = "MemUtil";
+	
+	
+	
 	
 	
 	// constructors

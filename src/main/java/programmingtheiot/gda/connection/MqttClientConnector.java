@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
@@ -24,6 +25,7 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import programmingtheiot.common.ConfigCloud;
 import programmingtheiot.common.ConfigConst;
 import programmingtheiot.common.ConfigUtil;
 import programmingtheiot.common.IDataMessageListener;
@@ -63,6 +65,10 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	private boolean enableAutoReconnect;
 	private String pemFileName;
 	
+	private boolean useCloudGatewayConfig = false;
+	
+	private String userToken;
+	
 	// constructors
 	
 	/**
@@ -71,46 +77,33 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 * based on the default configuration file contents.
 	 * 
 	 */
+	
 	public MqttClientConnector()
+	{
+		this(false);
+	}
+	
+	public MqttClientConnector(boolean useCloudGatewayConfig)
+	{
+		super();
+		
+		this.useCloudGatewayConfig = useCloudGatewayConfig;
+		
+		if (useCloudGatewayConfig) {
+			initClientParameters(ConfigConst.CLOUD_GATEWAY_SERVICE);
+		} else {
+			initClientParameters(ConfigConst.MQTT_GATEWAY_SERVICE);
+		}
+	}
+	
+	/*public MqttClientConnector()
 	{
 		super();
 		
 		initClientParameters(ConfigConst.MQTT_GATEWAY_SERVICE);
 		
-		/*
-		ConfigUtil configUtil = ConfigUtil.getInstance();
-
-		this.host =
-		    configUtil.getProperty(
-		        ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.HOST_KEY, ConfigConst.DEFAULT_HOST);
-
-		this.port =
-		    configUtil.getInteger(
-		        ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.PORT_KEY, ConfigConst.DEFAULT_MQTT_PORT);
-
-		this.brokerKeepAlive =
-		    configUtil.getInteger(
-		        ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
-
-		// paho Java client requires a client ID
-		this.clientID = MqttClient.generateClientId();
-
-		// these are specific to the MQTT connection which will be used during connect
-		this.persistence = new MemoryPersistence();
-		this.connOpts = new MqttConnectOptions();
-
-		this.connOpts.setKeepAliveInterval(this.brokerKeepAlive);
-		this.connOpts.setCleanSession(false);
-		this.connOpts.setAutomaticReconnect(true);
-
-		// NOTE: URL does not have a protocol handler for "tcp",
-		// so we need to construct the URL manually
-		this.brokerAddr = this.protocol + "://" + this.host + ":" + this.port;
 		
-		*/
-		
-		
-	}
+	}*/
 	
 	
 	// public methods
@@ -168,7 +161,7 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public boolean isConnected()
 	{
-		return false;
+		return this.mqttClient.isConnected();
 	}
 	
 	@Override
@@ -180,24 +173,10 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public boolean publishMessage(ResourceNameEnum topicName, String msg, int qos)
 	{	
-		//_Logger.info("The function publishMessage is called-> msg:" + msg);
+
 		String topic = topicName.getResourceName();
 		byte[] payload = msg.getBytes();
-		
-		if (qos < 0 || qos > 2) {
-			qos = ConfigConst.DEFAULT_QOS;
-		}
-					
-		try {
-			this.mqttClient.publish(topic, payload, qos, true);
-		} catch (MqttPersistenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MqttException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
+		return publishMessage(topic, payload, qos);
 	}
 
 	@Override
@@ -208,20 +187,8 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public boolean subscribeToTopic(ResourceNameEnum topicName, int qos)
 	{
-		_Logger.info("The function subscribeToTopic is called");
 		String topic = topicName.getResourceName();
-		
-		if (qos < 0 || qos > 2) {
-			qos = ConfigConst.DEFAULT_QOS;
-		}
-					
-		try {
-			this.mqttClient.subscribe(topic, qos);
-		} catch (MqttException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
+		return subscribeToTopic(topic, qos);
 	}
 
 	@Override
@@ -231,18 +198,11 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public boolean unsubscribeFromTopic(ResourceNameEnum topicName)
 	{
-		_Logger.info("The function unsubscribeFromTopic is called");
 		String topic = topicName.getResourceName();
-		
-		try {
-			this.mqttClient.unsubscribe(topic);
-		} catch (MqttException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
+		return unsubscribeFromTopic(topic);
 	}
 
+	
 	@Override
 	public boolean setDataMessageListener(IDataMessageListener listener)
 	{
@@ -255,6 +215,70 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	    return false;
 	}
 	
+	//protected method implementations for publish
+	protected boolean publishMessage(String topic, byte[] payload, int qos)
+	{
+		MqttMessage message = new MqttMessage(payload);
+		
+		if (qos < 0 || qos > 2) {
+			qos = 0;
+		}
+		
+		message.setQos(qos);
+		
+		// NOTE: you may want to log the exception stack trace if the call fails
+		try {
+			_Logger.info("Publishing message to topic: " + topic);
+			
+			this.mqttClient.publish(topic, message);
+			
+			return true;
+		} catch (MqttPersistenceException e) {
+			_Logger.warning("Persistence exception thrown when publishing to topic: " + topic);
+		} catch (MqttException e) {
+			_Logger.warning("MQTT exception thrown when publishing to topic: " + topic);
+		}
+		
+		return false;
+	}
+	
+	//protected method implementations for subscribe
+	protected boolean subscribeToTopic(String topic, int qos)
+	{
+		// NOTE: you may want to log the exception stack trace if the call fails
+		try {
+			this.mqttClient.subscribe(topic, qos);
+			
+			return true;
+		} catch (MqttException e) {
+			_Logger.warning("Failed to subscribe to topic: " + topic);
+		}
+		
+		return false;
+	}
+	
+	//protected method implementations for unsubscribe
+	protected boolean unsubscribeFromTopic(String topic)
+	{
+		// NOTE: you may want to log the exception stack trace if the call fails
+		try {
+			this.mqttClient.unsubscribe(topic);
+			
+			return true;
+		} catch (MqttException e) {
+			_Logger.warning("Failed to unsubscribe from topic: " + topic);
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	// callbacks
 	
 	@Override
@@ -266,7 +290,6 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 		_Logger.info("MQTT connection successful (is reconnect = " + reconnect + "). Broker: " + serverURI);
 		
 		int qos = 1;
-		
 		// Option 2
 		try {
 			this.mqttClient.subscribe(
@@ -317,6 +340,7 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	private void initClientParameters(String configSectionName)
 	{
 		ConfigUtil configUtil = ConfigUtil.getInstance();
+		ConfigCloud configCloud = ConfigCloud.getInstance();
 		
 		this.host =
 			configUtil.getProperty(
@@ -334,6 +358,13 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 			configUtil.getProperty(
 				configSectionName, ConfigConst.CERT_FILE_KEY);
 		
+		if(configSectionName == ConfigConst.CLOUD_GATEWAY_SERVICE) {
+			this.userToken = configCloud.getProperty("Cloud", "userToken");
+		}
+		
+		
+		
+		
 		// Paho Java client requires a client ID
 		this.clientID = MqttClient.generateClientId();
 		
@@ -343,6 +374,11 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 		
 		this.connOpts.setKeepAliveInterval(this.brokerKeepAlive);
 		this.connOpts.setCleanSession(this.useCleanSession);
+		
+		if(configSectionName == ConfigConst.CLOUD_GATEWAY_SERVICE) {
+			this.userToken = configCloud.getProperty("Cloud", "userToken");
+			this.connOpts.setUserName(this.userToken);
+		}
 		this.connOpts.setAutomaticReconnect(this.enableAutoReconnect);
 		
 		// if encryption is enabled, try to load and apply the cert(s)

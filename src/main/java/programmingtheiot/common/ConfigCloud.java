@@ -21,21 +21,21 @@ import org.apache.commons.configuration.*;
  * configuration infrastructure.
  * 
  */
-public class ConfigUtil
+public class ConfigCloud
 {
 	// static
 	
 	private static final Logger _Logger =
 		Logger.getLogger(ConfigUtil.class.getName());
 	
-	private static final ConfigUtil _Instance = new ConfigUtil();
+	private static final ConfigCloud _Instance = new ConfigCloud();
 
 	/**
 	 * Returns the Singleton instance of this class.
 	 * 
 	 * @return ConfigUtil
 	 */
-	public static final ConfigUtil getInstance()
+	public static final ConfigCloud getInstance()
 	{
 		return _Instance;
 	}
@@ -47,7 +47,7 @@ public class ConfigUtil
 	private HierarchicalINIConfiguration sectionProperties = null;
 	
 	private boolean isLoaded = false;
-	private String  configFileName = ConfigConst.DEFAULT_CONFIG_FILE_NAME;
+	private String  configFileName = ConfigConst.DEFAULT_CLOUD_CONFIG_FILE_NAME;
 	
 	
 	// constructors
@@ -57,7 +57,7 @@ public class ConfigUtil
 	 * 
 	 * Creates a new instance of {@link HierarchichalINIConfiguration}.
 	 */
-	private ConfigUtil()
+	private ConfigCloud()
 	{
 		super();
 		

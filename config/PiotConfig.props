@@ -5,18 +5,23 @@
 # ConfigUtil with keys defined in ConfigConst.
 #
 
+
 #
 # Cloud client configuration information
 #
 [Cloud.GatewayService]
-credFile       = ./cred/PiotCloudCred.props
-certFile       = ./cert/PiotMqttCloudCertFile.pem
-host           = localhost
+credFile       = ./config/UbidotsCloudCred.props
+certFile       = ./config/UbidotsCloudCert.pem
+host           = industrial.api.ubidots.com
 port           = 1883
-securePort     = 1884
+securePort     = 8883
 defaultQoS     = 0
 keepAlive      = 30
 enableCrypt    = True
+baseUrl        = https://things.ubidots.com/api/v1.6/
+baseTopic      = /v1.6/devices/
+
+
 
 #
 # SMTP client configuration information
@@ -36,7 +41,7 @@ credFile       = ./cred/PiotMqttCred.props
 certFile       = ./cert/PiotMqttLocalCertFile.pem
 host           = localhost
 port           = 1883
-securePort     = 1884
+securePort     = 8883
 defaultQoS     = 0
 keepAlive      = 30
 enableCrypt    = False
