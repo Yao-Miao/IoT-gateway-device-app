@@ -6,44 +6,35 @@ Be sure to implement all the PIOT-GDA-* issues (requirements) listed at [PIOT-IN
 
 ### Description
 
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
-
 What does your implementation do? 
+
+Build cloud-integration functionality into your GDA using your GDA's MQTT client to connect to a variety of MQTT-enabled cloud services that provide IoT capabilities. Build the additional functionality needed to enable end-to-end communications between your CDA, GDA, and the cloud.
 
 How does your implementation work?
 
-### Code Repository and Branch
+1.	Setup and configure cloud service environment
+2.	Update MqttClientConnector with some additional features that allow it to do the following: Load its configuration parameters from a different section of the PiotConfig.props configuration file. Allow a package-scoped class or sub-class to directly invoke publish, subscribe, and unsubscribe functions.
+3.	Create a Java interface named ICloudClient
+4.	Create a Java class named CloudClientConnector that implements ICloudClient
+5.	implement the requisite services and functionality within your selected cloud service environment to do the following: Capture, collect, and store sensor data from the CDA and system performance data from both the CDA and GDA. Analyze the sensor data and trigger an LED actuation event based on thresholds you determine are best for your implementation. 
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
+
+### Code Repository and Branch
 
 URL: 
 
 ### UML Design Diagram(s)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
 book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
+- N/A 
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
-
-- 
-- 
-- 
+- MqttClientConnectorTest
+- CloudClientConnectorTest 
 
 EOF.
