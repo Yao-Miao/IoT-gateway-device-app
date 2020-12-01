@@ -77,7 +77,7 @@ public class ConfigConst
 	
 	public static final String DEFAULT_CONFIG_FILE_NAME = "./config/PiotConfig.props";
 	public static final String DEFAULT_CRED_FILE_NAME   = "./cred/PiotCred.props";
-	public static final String DEFAULT_CLOUD_CONFIG_FILE_NAME = "./cred/UbidotsCloudCred.props";
+	public static final String DEFAULT_CLOUD_CONFIG_FILE_NAME = "./config/cred/UbidotsCloudCred.props";
 	
 	public static final int DEFAULT_QOS = 0;
 	
