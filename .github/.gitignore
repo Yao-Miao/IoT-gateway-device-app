@@ -1,2 +1,3 @@
 #ignore the cloud service config file
-CloudConfig.props
+UbidotsCloudCred.props
+UbidotsCloudCert.pem
