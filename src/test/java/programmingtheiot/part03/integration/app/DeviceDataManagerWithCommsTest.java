@@ -82,7 +82,7 @@ public class DeviceDataManagerWithCommsTest
 	@Test
 	public void testStartAndStopManagerNoComms()
 	{
-		boolean enableMqtt = false;
+		boolean enableMqtt = true;
 		boolean enableCoap = false;
 		boolean enableCloud = false;
 		boolean enableSmtp = false;

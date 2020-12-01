@@ -95,7 +95,7 @@ public class DeviceDataManagerNoCommsTest
 		devDataMgr.startManager();
 		
 		try {
-			Thread.sleep(10000L);
+			Thread.sleep(1000000L);
 		} catch (InterruptedException e) {
 			// ignore
 		}
