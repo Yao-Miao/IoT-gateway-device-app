@@ -60,8 +60,12 @@ public class CoapClientPerformanceTest {
 			
 		long endMillis = System.currentTimeMillis();
 		long elapsedMillis = endMillis - startMillis;
-			
-		_Logger.info("POST message - useCON " + enableCON + " [" + maxTestRuns + "]: " + elapsedMillis + " ms");
+		if(enableCON) {
+			_Logger.info("POST message - useCON " + enableCON + " [" + maxTestRuns + "]: " + elapsedMillis + " ms");
+		}else {
+			_Logger.info("POST message - useNON " + enableCON + " [" + maxTestRuns + "]: " + elapsedMillis + " ms");
+		}
+		
 	}
 
 }
