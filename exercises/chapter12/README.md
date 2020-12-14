@@ -32,7 +32,7 @@ URL:
 
 ### UML Design Diagram(s)
 
-book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
+![GDA_UML](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter12/exercises/chapter12/GDA.png).
 
 
 ### Unit Tests Executed
