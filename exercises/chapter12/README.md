@@ -45,4 +45,14 @@ URL: https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/tree
 - CoapServerGatewayTest
 - CoapClientConnectorTest
 
+### Cloud Data
+
+![CPU](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter12/exercises/chapter12/CDA_CPU.jpg).
+![ME](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter12/exercises/chapter12/CDA_ME.jpg).
+![SOIL](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter12/exercises/chapter12/Soil.jpg).
+![TEMP](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter12/exercises/chapter12/Temp.jpg).
+![PRESSURE](https://github.com/NU-CSYE6530-Fall2020/gateway-device-app-MyronForNEU/blob/chapter12/exercises/chapter12/Pressure.jpg).
+
+
+
 EOF.
