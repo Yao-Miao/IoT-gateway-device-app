@@ -2,48 +2,47 @@
 
 ## Lab Module 12 - Semester Project - GDA Components
 
-Be sure to implement all the PIOT-GDA-* issues (requirements) listed at [PIOT-INF-11-001 - Chapter 11](https://github.com/orgs/programming-the-iot/projects/1#column-10488514).
-
 ### Description
-
-NOTE: Include two full paragraphs describing your implementation approach by answering the questions listed below.
 
 What does your implementation do? 
 
+1.	Connect to the CDA using at least 1 protocol
+2.	Connect to the cloud using at least 1 protocol
+3.	Process system performance data, sensor data, and actuator command responses from the CDA
+4.	Analyze one sensor data value from the CDA, and generate an appropriate actuation event based on an algorithm of your choosing. This must be different than the actuation event the CDA will generate for itself based on a configured threshold crossing.
+5.	Collect internal system performance data for CPU, memory and disk util (these can be averaged)
+6.	Store at least one data sample (the latest) from the CDA (sensor data and system performance data) plus at least one data sample from internal system performance data within a local storage data repository such as Redis (others are OK - coordinate with the TA's for approval if not Redis)
+7.	Send all CDA sensor and system performance data to the cloud service
+8.	Send all internal system performance data to the cloud service
+9.	Connect to the cloud service topic that will notify the GDA upon cloud-based event and use that event to trigger an actuation event that will then be sent to the CDA
+10.	Run for at least 1 hour without interruption, and collect / send at least 30 system performance samples each from the CDA and internally, 30 sensor data samples from the CDA, and trigger at least 2 actuator events based on GDA logic, and at least 2 actuator events based on cloud notifications
+
 How does your implementation work?
 
-### Code Repository and Branch
+1.	Upate CloudClientConnector class to use the callback function to send data to cloud service.
+2.	Update MqttClientConnector to receive the data from cda and use the callback function to handle the data.
+3.	Update CoapClientConnector class to send actuator events to CDA.
+4.	Update RedisPersistenceAdapter class to store the data to local database.
+5.	Update DeviceDataManager class.
 
-NOTE: Be sure to include the branch (e.g. https://github.com/programming-the-iot/python-components/tree/alpha001).
+
+### Code Repository and Branch
 
 URL: 
 
 ### UML Design Diagram(s)
 
-NOTE: Include one or more UML designs representing your solution. It's expected each
-diagram you provide will look similar to, but not the same as, its counterpart in the
 book [Programming the IoT](https://learning.oreilly.com/library/view/programming-the-internet/9781492081401/).
 
 
 ### Unit Tests Executed
 
-NOTE: TA's will execute your unit tests. You only need to list each test case below
-(e.g. ConfigUtilTest, DataUtilTest, etc). Be sure to include all previous tests, too,
-since you need to ensure you haven't introduced regressions.
-
-- 
-- 
-- 
 
 ### Integration Tests Executed
 
-NOTE: TA's will execute most of your integration tests using their own environment, with
-some exceptions (such as your cloud connectivity tests). In such cases, they'll review
-your code to ensure it's correct. As for the tests you execute, you only need to list each
-test case below (e.g. SensorSimAdapterManagerTest, DeviceDataManagerTest, etc.)
-
-- 
-- 
-- 
+- MqttClientConnectorTest
+- CloudClientConnectorTest
+- CoapServerGatewayTest
+- CoapClientConnectorTest
 
 EOF.
