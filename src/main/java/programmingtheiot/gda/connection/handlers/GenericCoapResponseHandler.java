@@ -21,9 +21,30 @@ public class GenericCoapResponseHandler implements CoapHandler{
 	private IDataMessageListener dataMsgListener = null;
 	
 	// constructors
-	public GenericCoapResponseHandler(IDataMessageListener dataMsgListener)
+	/*public GenericCoapResponseHandler(IDataMessageListener dataMsgListener)
 	{
 		this.dataMsgListener = dataMsgListener;
+	}*/
+	/**
+	 * Default.
+	 * 
+	 */
+	public GenericCoapResponseHandler()
+	{
+		this((IDataMessageListener) null);
+	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 */
+	public GenericCoapResponseHandler(IDataMessageListener listener)
+	{
+		super();
+		
+		dataMsgListener = listener;
+		
+		_Logger.fine("Response handler created. IDataMessageListener is " + (listener != null ? "set" : "not set"));
 	}
 	
 	

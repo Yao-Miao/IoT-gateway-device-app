@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 
 import programmingtheiot.common.ConfigConst;
 import programmingtheiot.common.IDataMessageListener;
+import programmingtheiot.common.ResourceNameEnum;
+import programmingtheiot.data.SystemPerformanceData;
 import programmingtheiot.gda.app.GatewayDeviceApp;
 
 /**
@@ -37,7 +39,7 @@ public class SystemPerformanceManager
 
 	private Runnable taskRunner = null;
 	private boolean isStarted = false;
-	
+	private IDataMessageListener dataMsgListener = null;
 	
 	// constructors
 	
@@ -82,12 +84,21 @@ public class SystemPerformanceManager
 		float memUtilPct = this.memUtilTask.getTelemetryValue();
 		//float rtMemUtilPct = this.rtMemUtilTask.getTelemetryValue(); -- delete by yao miao. this syntax is to get runtime memory utilization
 		
+		SystemPerformanceData spd = new SystemPerformanceData();
+		spd.setCpuUtilization(cpuUtilPct);
+		spd.setMemoryUtilization(memUtilPct);
+		
+		if(this.dataMsgListener != null) {
+			this.dataMsgListener.handleSystemPerformanceMessage(ResourceNameEnum.GDA_SYSTEM_PERF_MSG_RESOURCE, spd);
+		}
+		
 		_Logger.info("CPU utilization is " + cpuUtilPct +  " percent, and memory utilization is " + memUtilPct + " percent.");
 		//_Logger.info("Handle telemetry results: cpuUtil=" + cpuUtilPct + ", memUtil=" + memUtilPct + "%");
 	}
 	
 	public void setDataMessageListener(IDataMessageListener listener)
 	{
+		this.dataMsgListener = listener;
 	}
 	
 	//Start the System Performance Manager. Start ScheduledExecutorService. Switch isStarted to true.

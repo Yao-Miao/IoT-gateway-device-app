@@ -8,6 +8,7 @@
 
 package programmingtheiot.gda.connection.handlers;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.eclipse.californium.core.CoapResource;
@@ -34,6 +35,8 @@ public class GenericCoapResourceHandler extends CoapResource
 	// params
 	private IDataMessageListener dataMsgListener = null;
 	
+	private HashMap<String, String> map;
+	
 	// constructors
 	
 	/**
@@ -44,6 +47,7 @@ public class GenericCoapResourceHandler extends CoapResource
 	public GenericCoapResourceHandler(ResourceNameEnum resource)
 	{
 		this(resource.getResourceName());
+		map = new HashMap<>();
 	}
 	
 	/**
@@ -54,6 +58,7 @@ public class GenericCoapResourceHandler extends CoapResource
 	public GenericCoapResourceHandler(String resourceName)
 	{
 		super(resourceName);
+		map = new HashMap<>();
 	}
 	
 	
@@ -62,6 +67,7 @@ public class GenericCoapResourceHandler extends CoapResource
 	@Override
 	public void handleDELETE(CoapExchange context)
 	{
+		
 	}
 	
 	@Override
@@ -73,10 +79,10 @@ public class GenericCoapResourceHandler extends CoapResource
 	    context.accept();
 	    
 	    // TODO: retrieve the requested data and generate a response message: 'msg'
-	    String msg = ""; // fill this in
-	    
+	    String key = this.getURI();
+	    String msg = map.containsKey(key) ? map.get(key) : "";
 	    // send an appropriate response
-	    context.respond(ResponseCode.VALID, msg);
+	    context.respond(ResponseCode.CONTENT, msg);
 	    
 	}
 	
@@ -87,12 +93,19 @@ public class GenericCoapResourceHandler extends CoapResource
 	    
 	    // accept the request
 	    context.accept();
+	    String key = this.getURI();
+	    
+	    
 	    
 	    // TODO: create (or update) the resource with the payload
-	    String payload = context.getRequestText();
+	    String payload = new String(context.getRequestPayload());
+	    if(payload != null) {
+	    	map.put(key, payload);
+	    }
+	    
 	    
 	    // TODO: generate a response message: 'msg'
-	    String msg = ""; // fill this in
+	    String msg = "Success"; // fill this in
 	    
 	    // send an appropriate response
 	    context.respond(ResponseCode.CREATED, msg);

@@ -35,6 +35,8 @@ import javax.net.ssl.SSLSocketFactory;
 import programmingtheiot.common.SimpleCertManagementUtil;
 
 import programmingtheiot.data.DataUtil;
+import programmingtheiot.data.SensorData;
+import programmingtheiot.data.SystemPerformanceData;
 import programmingtheiot.data.ActuatorData;
 
 /**
@@ -228,7 +230,7 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 		
 		// NOTE: you may want to log the exception stack trace if the call fails
 		try {
-			//_Logger.info("Publishing message to topic: " + topic);
+			_Logger.info("Publishing message to topic: " + topic);
 			
 			this.mqttClient.publish(topic, message);
 			
@@ -287,18 +289,24 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public void connectComplete(boolean reconnect, String serverURI)
 	{
-		_Logger.info("MQTT connection successful (is reconnect = " + reconnect + "). Broker: " + serverURI);
+		_Logger.info("[GDA_MQTT_CALLBACK]MQTT connection successful (is reconnect = " + reconnect + "). Broker: " + serverURI);
 		
 		int qos = 1;
+		
+		this.subscribeToTopic(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, qos);
+		this.subscribeToTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, qos);
+		this.subscribeToTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, qos);
+		
 		// Option 2
-		try {
+		/*try {
 			this.mqttClient.subscribe(
 				ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE.getResourceName(),
 				qos,
 				new ActuatorResponseMessageListener(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, this.dataMsgListener));
 		} catch (MqttException e) {
 			_Logger.warning("Failed to subscribe to CDA actuator response topic.");
-		}
+		}*/
+		
 	}
 
 	@Override
@@ -307,7 +315,7 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public void connectionLost(Throwable t)
 	{
-		_Logger.info("The function connectionLost is called");
+		_Logger.info("[GDA_MQTT_CALLBACK]The function connectionLost is called");
 	}
 	
 	@Override
@@ -316,7 +324,7 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public void deliveryComplete(IMqttDeliveryToken token)
 	{
-		//_Logger.info("The function deliveryComplete is called");
+		_Logger.info("[GDA_MQTT_CALLBACK]The function deliveryComplete is called");
 	}
 	
 	@Override
@@ -325,7 +333,32 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public void messageArrived(String topic, MqttMessage msg) throws Exception
 	{
-		_Logger.info("The function messageArrived is called");
+		String arriveMsg = msg.toString();
+		String sensorTopic = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE.getResourceName();
+		String sysTopic = ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE.getResourceName();
+		String actuatorTopic = ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE.getResourceName();
+		String cloudTopic = "/v1.6/devices/gatewaydevice/spractuator-flag";
+		
+		_Logger.info("[GDA_MQTT_CALLBACK] The function messageArrived is called + [topic]:" + topic);
+		
+		if(this.dataMsgListener != null) {
+			
+			if(topic.equals(sensorTopic)) {
+				SensorData sd = DataUtil.getInstance().jsonToSensorData(arriveMsg);
+				this.dataMsgListener.handleSensorMessage(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, sd);	
+			}else if(topic.equals(sysTopic)) {
+				SystemPerformanceData spd = DataUtil.getInstance().jsonToSystemPerformanceData(arriveMsg);
+				this.dataMsgListener.handleSystemPerformanceMessage(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, spd);
+			}else if(topic.equals(actuatorTopic)) {
+				ActuatorData ad = DataUtil.getInstance().jsonToActuatorData(arriveMsg);
+				this.dataMsgListener.handleActuatorCommandResponse(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, ad);
+			}else{
+				_Logger.info("[TEST====>>>>]MSG:" + msg);
+				//this.dataMsgListener.handleIncomingMessage(resourceName, msg);
+			}
+					
+		}
+		
 	}
 
 	

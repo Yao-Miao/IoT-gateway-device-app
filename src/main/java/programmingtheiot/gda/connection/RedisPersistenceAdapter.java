@@ -75,7 +75,7 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 			_Logger.info("Connecting.....");
 			jedisClient.connect();
 			_Logger.info("The jedis is already connected");
-			
+
 		}
 		return true;
 	}
@@ -99,11 +99,14 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	public ActuatorData[] getActuatorData(String topic, Date startDate, Date endDate)
 	{
 		List<ActuatorData> list = new ArrayList<>();
-		String adJson = jedisClient.get(topic);
+		List<String> adJsons = jedisClient.lrange(topic, 0, -1);
+		for(String adJson : adJsons) {
+			ActuatorData ad = dataUtil.jsonToActuatorData(adJson);
+			list.add(ad);
+		}
 		
-		ActuatorData ad = dataUtil.jsonToActuatorData(adJson);
-		list.add(ad);
-		ActuatorData[] ActuatorDataArr = (ActuatorData[]) list.toArray();
+		ActuatorData[] ActuatorDataArr = new ActuatorData[list.size()];
+		ActuatorDataArr = list.toArray(ActuatorDataArr);
 		return ActuatorDataArr;
 	}
 
@@ -111,10 +114,13 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	public SensorData[] getSensorData(String topic, Date startDate, Date endDate)
 	{
 		List<SensorData> list = new ArrayList<>();
-		String sdJson = jedisClient.get(topic);
-		SensorData sd = dataUtil.jsonToSensorData(sdJson);
-		list.add(sd);
-		SensorData[] SensorDataArr = (SensorData[]) list.toArray();
+		List<String> sdJsons = jedisClient.lrange(topic, 0, 10);
+		for(String sdJson : sdJsons) {
+			SensorData sd = dataUtil.jsonToSensorData(sdJson);
+			list.add(sd);
+		}
+		SensorData[] SensorDataArr = new SensorData[list.size()];
+		SensorDataArr = list.toArray(SensorDataArr);
 		return SensorDataArr;
 	}
 
@@ -126,13 +132,21 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	@Override
 	public boolean storeData(String topic, int qos, ActuatorData... data)
 	{
-		return false;
+		for(ActuatorData ad : data) {
+			String adJson = this.dataUtil.actuatorDataToJson(ad);
+			this.jedisClient.lpush(topic, adJson);
+		}
+		return true;
 	}
 
 	@Override
 	public boolean storeData(String topic, int qos, SensorData... data)
 	{
-		return false;
+		for(SensorData sd : data) {
+			String sdJson = this.dataUtil.sensorDataToJson(sd);
+			this.jedisClient.lpush(topic, sdJson);
+		}
+		return true;
 	}
 
 	/**
@@ -141,7 +155,15 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	@Override
 	public boolean storeData(String topic, int qos, SystemPerformanceData... data)
 	{
-		return false;
+		for(SystemPerformanceData spd : data) {
+			String spdJson = this.dataUtil.systemPerformanceDataToJson(spd);
+			this.jedisClient.lpush(topic, spdJson);
+		}
+		return true;
+	}
+	
+	public long getListLen(String topic) {
+		return this.jedisClient.llen(topic);
 	}
 	
 	

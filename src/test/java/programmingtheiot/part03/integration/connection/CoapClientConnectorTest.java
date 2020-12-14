@@ -97,7 +97,7 @@ public class CoapClientConnectorTest
 	 * test Connect And Discover :add by miaoyao
 	 ***************************************************************/
 	
-	@Test
+	//@Test
 	public void testConnectAndDiscover()
 	{
 		assertTrue(this.coapClient.sendDiscoveryRequest(DEFAULT_TIMEOUT));
@@ -116,7 +116,7 @@ public class CoapClientConnectorTest
 	 * test Get with CON:add by miaoyao
 	 ***************************************************************/
 	
-	@Test
+	//@Test
 	public void testGetRequestCon()
 	{
 		assertTrue(this.coapClient.sendGetRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, true, DEFAULT_TIMEOUT));
@@ -153,7 +153,7 @@ public class CoapClientConnectorTest
 	 * test Post with CON:add by miaoyao
 	 ***************************************************************/
 
-	@Test
+	//@Test
 	public void testPostRequestCon()
 	{
 		int actionCmd = 2;
@@ -176,7 +176,7 @@ public class CoapClientConnectorTest
 	/***************************************************************
 	 * test Post with NON:add by miaoyao
 	 ***************************************************************/	
-	@Test
+	//@Test
 	public void testPostRequestNon()
 	{
 		int actionCmd = 2;
@@ -201,7 +201,7 @@ public class CoapClientConnectorTest
 	/***************************************************************
 	 * test Put WITH CON:add by miaoyao
 	 ***************************************************************/
-	@Test
+	//@Test
 	public void testPutRequestCon()
 	{
 		int actionCmd = 2;
@@ -233,6 +233,7 @@ public class CoapClientConnectorTest
 		ssd.setActionCommand(actionCmd);
 		
 		String ssdJson = DataUtil.getInstance().systemStateDataToJson(ssd);
+		System.out.print(ssdJson);
 		assertTrue(this.coapClient.sendPutRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, false, ssdJson, DEFAULT_TIMEOUT));
 		
 		// NOTE: If you are using a custom asynchronous discovery, include a brief wait here
@@ -248,7 +249,7 @@ public class CoapClientConnectorTest
 	 * test Delete WITH CON:add by miaoyao
 	 ***************************************************************/
 
-	@Test
+	//@Test
 	public void testDeleteRequestCon()
 	{
 		assertTrue(this.coapClient.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, true, DEFAULT_TIMEOUT));
@@ -265,7 +266,7 @@ public class CoapClientConnectorTest
 	/***************************************************************
 	 * test Delete WITH NON:add by miaoyao
 	 ***************************************************************/
-	@Test
+	//@Test
 	public void testDeleteRequestNon()
 	{
 		assertTrue(this.coapClient.sendDeleteRequest(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE, false, DEFAULT_TIMEOUT));

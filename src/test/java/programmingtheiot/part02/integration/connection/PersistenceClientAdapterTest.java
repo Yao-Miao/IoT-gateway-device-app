@@ -11,6 +11,8 @@ package programmingtheiot.part02.integration.connection;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.After;
@@ -19,7 +21,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import programmingtheiot.data.ActuatorData;
 import programmingtheiot.gda.connection.RedisPersistenceAdapter;
+import programmingtheiot.common.ResourceNameEnum;
 
 /**
  * This test case class contains very basic integration tests for
@@ -50,6 +54,7 @@ public class PersistenceClientAdapterTest
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
 	{
+		
 	}
 	
 	/**
@@ -66,6 +71,7 @@ public class PersistenceClientAdapterTest
 	@Before
 	public void setUp() throws Exception
 	{
+		this.rpa = new RedisPersistenceAdapter();
 	}
 	
 	/**
@@ -84,16 +90,16 @@ public class PersistenceClientAdapterTest
 	@Test
 	public void testConnectClient()
 	{
-		fail("Not yet implemented"); // TODO
+		assertTrue(this.rpa.connectClient());
 	}
 	
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#disconnectClient()}.
 	 */
-	@Test
+	//@Test
 	public void testDisconnectClient()
 	{
-		fail("Not yet implemented"); // TODO
+		assertTrue(this.rpa.disconnectClient());
 	}
 	
 	/**
@@ -102,13 +108,18 @@ public class PersistenceClientAdapterTest
 	@Test
 	public void testGetActuatorData()
 	{
-		fail("Not yet implemented"); // TODO
+		Date startDate = new Date();
+		Date endDate = new Date();
+		ActuatorData[] ads = this.rpa.getActuatorData(ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.getResourceName(), startDate, endDate);
+		for(ActuatorData ad : ads) {
+			System.out.println(ad.getValue());
+		}
 	}
 	
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#getSensorData(java.lang.String, java.util.Date, java.util.Date)}.
 	 */
-	@Test
+	//@Test
 	public void testGetSensorData()
 	{
 		fail("Not yet implemented"); // TODO
@@ -117,16 +128,19 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#storeData(java.lang.String, int, programmingtheiot.data.ActuatorData[])}.
 	 */
-	@Test
+	//@Test
 	public void testStoreDataStringIntActuatorDataArray()
 	{
-		fail("Not yet implemented"); // TODO
+		ActuatorData ad = new ActuatorData();
+		ad.setValue(12);
+		this.rpa.storeData(ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE.getResourceName(), 0, ad);
+		
 	}
 	
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#storeData(java.lang.String, int, programmingtheiot.data.SensorData[])}.
 	 */
-	@Test
+	//@Test
 	public void testStoreDataStringIntSensorDataArray()
 	{
 		fail("Not yet implemented"); // TODO
@@ -135,7 +149,7 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#storeData(java.lang.String, int, programmingtheiot.data.SystemPerformanceData[])}.
 	 */
-	@Test
+	//@Test
 	public void testStoreDataStringIntSystemPerformanceDataArray()
 	{
 		fail("Not yet implemented"); // TODO

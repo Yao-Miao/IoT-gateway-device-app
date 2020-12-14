@@ -23,7 +23,7 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	// private var's
 	private float cpuUtil;
 	private float diskUtil;
-	private float memoryUtil;
+	private float memUtil;
 		
     
 	// constructors: initializing the class
@@ -53,7 +53,7 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	//get the memoryUtil: Memory utilization
 	public float getMemoryUtilization()
 	{
-		return this.memoryUtil;
+		return this.memUtil;
 	}
 	
 	//set the cpuUtil: CPU utilization
@@ -71,7 +71,7 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	//set the memoryUtil: Memory utilization
 	public void setMemoryUtilization(float val)
 	{
-		this.memoryUtil = val;
+		this.memUtil = val;
 	}
 	
 	
@@ -93,7 +93,7 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 		SystemPerformanceData sysd = (SystemPerformanceData) data;
 		this.cpuUtil = sysd.getCpuUtilization();
 		this.diskUtil = sysd.getDiskUtilization();
-		this.memoryUtil= sysd.getMemoryUtilization();
+		this.memUtil= sysd.getMemoryUtilization();
 	}
 	
 }

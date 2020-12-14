@@ -66,11 +66,18 @@ enableLogging           = True
 pollCycleSecs           = 60
 enableMqttClient        = True
 enableCoapServer        = True
-enableCloudClient       = False
+enableCloudClient       = True
 enableSmtpClient        = False
-enablePersistenceClient = False
+enablePersistenceClient = True
 testGdaDataPath = /tmp/gda-data
 testCdaDataPath = /tmp/cda-data
+
+#configurable limits for actuator triggers
+enableHandleTempChangeOnDevice = True
+triggerCtrlTempLevel1 = 10
+triggerCtrlTempLevel2 = 20
+triggerCtrlTempLevel3 = 30
+
 
 #
 # Persistence client configuration information

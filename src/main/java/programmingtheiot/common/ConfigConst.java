@@ -31,7 +31,7 @@ public class ConfigConst
 	public static final String DEFAULT_MQTT_SECURE_PROTOCOL = "ssl";
 	public static final int    DEFAULT_MQTT_PORT        = 1883;
 	public static final int    DEFAULT_MQTT_SECURE_PORT = 8883;
-	public static final int    DEFAULT_KEEP_ALIVE       = 60;
+	public static final int    DEFAULT_KEEP_ALIVE       = 120;
 	public static final int    DEFAULT_POLL_CYCLES      = 60;
 
 	public static final String PRODUCT_NAME = "ProgrammingIoT";
@@ -146,6 +146,15 @@ public class ConfigConst
 	public static final String CPU_UTIL_NAME  = "CpuUtil";
 	public static final String DISK_UTIL_NAME = "DiskUtil";
 	public static final String MEM_UTIL_NAME  = "MemUtil";
+	
+	public static final String SPR_ACTUATOR_NAME  = "SprActuator";
+	public static final String SPR_CTRL_ACTUATOR_NAME = "SprCtrlActuator";
+	
+	public static final String ENABLE_HANDLE_TEMP_CHANGE_KEY = "enableHandleTempChangeOnDevice";
+	public static final String TRIGGER_CTRL_TEMP_LEVEL1_KEY = "triggerCtrlTempLevel1";
+	public static final String TRIGGER_CTRL_TEMP_LEVEL2_KEY = "triggerCtrlTempLevel2";
+	public static final String TRIGGER_CTRL_TEMP_LEVEL3_KEY = "triggerCtrlTempLevel3";
+	
 	
 	
 	

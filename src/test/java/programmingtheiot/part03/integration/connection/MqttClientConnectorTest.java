@@ -70,7 +70,7 @@ public class MqttClientConnectorTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#connectClient()}.
 	 */
-	@Test
+	//@Test
 	public void testConnectAndDisconnect()
 	{
 		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
@@ -91,7 +91,7 @@ public class MqttClientConnectorTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
 	 */
-	@Test
+	//@Test
 	public void testPublishAndSubscribe()
 	{
 		int qos = 2;
@@ -143,6 +143,7 @@ public class MqttClientConnectorTest
 		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
 		
 		IDataMessageListener listener = new DefaultDataMessageListener();
+		this.mcc.setDataMessageListener(listener);
 		
 		assertTrue(this.mcc.connectClient());
 		assertTrue(this.mcc.publishMessage(ResourceNameEnum.CDA_MGMT_STATUS_CMD_RESOURCE, "TEST: This is the CDA command payload.", qos));
@@ -159,16 +160,18 @@ public class MqttClientConnectorTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.MqttClientConnector#publishMessage(programmingtheiot.common.ResourceNameEnum, java.lang.String, int)}.
 	 */
-	//@Test
+	@Test
 	public void testIntegrateWithCdaSubscribeCdaMgmtTopic()
 	{
 		int qos = 1;
 		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.MQTT_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
 		
 		IDataMessageListener listener = new DefaultDataMessageListener();
+		this.mcc.setDataMessageListener(listener);
 		
 		assertTrue(this.mcc.connectClient());
 		assertTrue(this.mcc.subscribeToTopic(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE, qos));
+		assertTrue(this.mcc.publishMessage(ResourceNameEnum.CDA_MGMT_STATUS_MSG_RESOURCE, "TEST: This is the CDA command payload.", qos));
 		
 		try {
 			Thread.sleep(delay * 1000);

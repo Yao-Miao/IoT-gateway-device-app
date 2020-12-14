@@ -195,7 +195,7 @@ public class CoapClientConnector implements IRequestResponseClient
 
 		this.clientConn.setURI(this.serverAddr + "/" + resource.getResourceName());
 		response = this.clientConn.get();
-
+		
 		if (response != null) {
 			// TODO: implement your logic here
 			
@@ -212,6 +212,7 @@ public class CoapClientConnector implements IRequestResponseClient
 		}
 
 		return false;
+
 	}
 	
 	/**

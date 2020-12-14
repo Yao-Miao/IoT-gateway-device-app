@@ -79,6 +79,9 @@ public class ActuatorData extends BaseIotData implements Serializable
 	{
 		this.value = val;
 	}
+	public void setActuatorType(int actuatorType) {
+		this.actuatorType = actuatorType;
+	}
 	
 	
 	// protected methods

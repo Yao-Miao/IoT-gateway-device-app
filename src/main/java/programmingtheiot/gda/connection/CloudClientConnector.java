@@ -17,6 +17,7 @@ import programmingtheiot.common.ConfigConst;
 import programmingtheiot.common.ConfigUtil;
 import programmingtheiot.common.IDataMessageListener;
 import programmingtheiot.common.ResourceNameEnum;
+import programmingtheiot.data.ActuatorData;
 import programmingtheiot.data.DataUtil;
 import programmingtheiot.data.SensorData;
 import programmingtheiot.data.SystemPerformanceData;
@@ -80,7 +81,7 @@ public class CloudClientConnector implements ICloudClient
 	{
 		if (this.mqttClient == null) {
 			this.mqttClient = new MqttClientConnector(true);
-		}	
+		}
 		return this.mqttClient.connectClient();
 	}
 
@@ -110,6 +111,29 @@ public class CloudClientConnector implements ICloudClient
 			String payload = DataUtil.getInstance().sensorDataToJson(data);
 			
 			return publishMessageToCloud(resource, data.getName(), payload);
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean sendEdgeDataToCloud(ResourceNameEnum resource, ActuatorData data)
+	{
+		if (resource != null && data != null) {
+			SensorData actuatorData = new SensorData();
+			if(data.getActuatorType() == 3) {
+				actuatorData.setName(ConfigConst.SPR_ACTUATOR_NAME);
+			}else if(data.getActuatorType() == 4) {
+				actuatorData.setName(ConfigConst.SPR_CTRL_ACTUATOR_NAME);
+			}
+			actuatorData.setValue(data.getCommand());
+			
+			boolean actuatorDataSuccess = sendEdgeDataToCloud(resource, actuatorData);
+			
+			if (! actuatorDataSuccess) {
+				_Logger.warning("Failed to send CPU Actuator data to cloud service.");
+			}
+			return actuatorDataSuccess;
 		}
 		
 		return false;
@@ -154,8 +178,26 @@ public class CloudClientConnector implements ICloudClient
 		String topicName = null;
 		
 		if (isMqttClientConnected()) {
-			topicName = createTopicName(resource);
+			topicName = createTopicName(resource) + "-" +ConfigConst.SPR_ACTUATOR_NAME;
 			
+			_Logger.info("[TEST]:topicName->" + topicName );
+			this.mqttClient.subscribeToTopic(topicName, this.qosLevel);
+			
+			success = true;
+		} else {
+			_Logger.warning("Subscription methods only available for MQTT. No MQTT connection to broker. Ignoring. Topic: " + topicName);
+		}
+		
+		return success;
+	}
+	
+	public boolean subscribeToEdgeEvents(String topicName)
+	{
+		boolean success = false;
+		
+		if (isMqttClientConnected()) {
+			
+			_Logger.info("[TEST]:topicName->" + topicName );
 			this.mqttClient.subscribeToTopic(topicName, this.qosLevel);
 			
 			success = true;
