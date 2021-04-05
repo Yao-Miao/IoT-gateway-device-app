@@ -130,6 +130,19 @@ public class DeviceDataManager implements IDataMessageListener
 		if(resourceName == ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE) {
 			ActuatorData ad = dataUtil.jsonToActuatorData(msg);
 			handleIncomingDataAnalysis(resourceName, ad);
+		}else if(resourceName == ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE){
+			ActuatorData ad = new ActuatorData();
+			float val = Float.valueOf(msg);
+			if(val == 0) {
+				ad.setCommand(0);
+				ad.setActuatorType(5);
+			}else if(val == 1) {
+				ad.setCommand(1);
+				ad.setActuatorType(5);
+			}
+			String adJson = dataUtil.actuatorDataToJson(ad);
+			handleUpstreamTransmission(ResourceNameEnum.CDA_CLOUD_ACTUATOR_CMD_RESOURCE, adJson, ConfigConst.DEFAULT_QOS);
+			
 		}else {
 			SystemStateData ssd = dataUtil.jsonToSystemStateData(msg);
 			handleIncomingDataAnalysis(resourceName, ssd);
@@ -177,7 +190,8 @@ public class DeviceDataManager implements IDataMessageListener
 		if(this.enableCloudClient) {
 			this.cloudClient.connectClient();
 			//this.cloudClient.subscribeToEdgeEvents(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE);
-			this.cloudClient.subscribeToEdgeEvents("/v1.6/devices/gatewaydevice/spractuator-flag");
+			this.cloudClient.subscribeToEdgeEvents(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE);
+			_Logger.info("[TEST]===>subscribeToEdgeEvents");
 			
 		}
 		
@@ -271,7 +285,7 @@ public class DeviceDataManager implements IDataMessageListener
 	 * @param qos
 	 * @return
 	 */
-	private synchronized boolean handleUpstreamTransmission(ResourceNameEnum resourceName, String jsonData, int qos)
+	private boolean handleUpstreamTransmission(ResourceNameEnum resourceName, String jsonData, int qos)
 	{
 		_Logger.info("The function handleUpstreamTransmission is called");
 		this.coapClient.sendPostRequest(resourceName, false, jsonData, 5);
@@ -291,7 +305,7 @@ public class DeviceDataManager implements IDataMessageListener
 			this.tempVal += data.getValue();
 			
 			_Logger.info("[TEST] sensorDatacount:" + sensorDatacount);
-			if(this.sensorDatacount == 10) {
+			if(this.sensorDatacount == 3) {
 				float avg = tempVal / sensorDatacount;
 				int triggerCtrlTempLevel1 = configUtil.getInteger(ConfigConst.GATEWAY_DEVICE, ConfigConst.TRIGGER_CTRL_TEMP_LEVEL1_KEY);
 				int triggerCtrlTempLevel2 = configUtil.getInteger(ConfigConst.GATEWAY_DEVICE, ConfigConst.TRIGGER_CTRL_TEMP_LEVEL2_KEY);
@@ -315,14 +329,6 @@ public class DeviceDataManager implements IDataMessageListener
 				this.sensorDatacount = 0;
 				this.tempVal = 0;
 				
-			}
-		}else if(data.getSensorType() == 2 && enableHandleTempChangeOnDevice) {
-			float pressureVal = data.getValue();
-			ActuatorData ad = new ActuatorData(3);
-			if(pressureVal > 1000 || pressureVal < 200) {
-				ad.setCommand(0);
-				String adJson = dataUtil.actuatorDataToJson(ad);
-				handleUpstreamTransmission(ResourceNameEnum.CDA_ACTUATOR_CMD_RESOURCE, adJson, ConfigConst.DEFAULT_QOS);
 			}
 		}
 	}

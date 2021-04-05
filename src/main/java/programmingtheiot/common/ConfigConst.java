@@ -51,10 +51,13 @@ public class ConfigConst
 	 */
 
 	public static final String TEMP_SENSOR_NAME = "TempSensor";
+	public static final String PRESSURE_SENSOR_NAME = "PressureSensor";
 	
 	public static final String DISPLAY_CMD     = "DisplayCmd";
 	public static final String SENSOR_MSG      = "SensorMsg";
 	public static final String ACTUATOR_CMD    = "ActuatorCmd";
+	//ADD BY MIAOYAO
+	public static final String CLOUD_ACTUATOR_CMD    = "CloudActuatorCmd";
 	public static final String ACTUATOR_RESPONSE = "ActuatorResponse";
 	public static final String MGMT_STATUS_MSG = "MgmtStatusMsg";
 	public static final String MGMT_STATUS_CMD = "MgmtStatusCmd";

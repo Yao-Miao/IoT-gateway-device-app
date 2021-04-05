@@ -75,16 +75,18 @@ public class CloudClientConnector implements ICloudClient
 		
 		return this.mqttClient.isConnected();
 	}
-	
+	//Create the mqtt client and connenct
 	@Override
 	public boolean connectClient()
 	{
 		if (this.mqttClient == null) {
 			this.mqttClient = new MqttClientConnector(true);
 		}
+		this.mqttClient.setDataMessageListener(this.dataMsgListener);
 		return this.mqttClient.connectClient();
 	}
-
+	
+    //disconnenct the client
 	@Override
 	public boolean disconnectClient()
 	{
@@ -95,7 +97,9 @@ public class CloudClientConnector implements ICloudClient
 		
 		
 	}
-
+	
+	
+	// set DataMessageListener
 	@Override
 	public boolean setDataMessageListener(IDataMessageListener listener)
 	{
@@ -103,7 +107,7 @@ public class CloudClientConnector implements ICloudClient
 		return true;
 	}
 
-
+	//send data to cloud service
 	@Override
 	public boolean sendEdgeDataToCloud(ResourceNameEnum resource, SensorData data)
 	{
@@ -116,6 +120,7 @@ public class CloudClientConnector implements ICloudClient
 		return false;
 	}
 	
+	//send data to cloud service
 	@Override
 	public boolean sendEdgeDataToCloud(ResourceNameEnum resource, ActuatorData data)
 	{
@@ -138,7 +143,8 @@ public class CloudClientConnector implements ICloudClient
 		
 		return false;
 	}
-
+	
+	//send data to cloud service
 	@Override
 	public boolean sendEdgeDataToCloud(ResourceNameEnum resource, SystemPerformanceData data)
 	{
@@ -169,7 +175,7 @@ public class CloudClientConnector implements ICloudClient
 		return false;
 	}
 
-
+	//subscribe cloud topic
 	@Override
 	public boolean subscribeToEdgeEvents(ResourceNameEnum resource)
 	{
@@ -178,10 +184,10 @@ public class CloudClientConnector implements ICloudClient
 		String topicName = null;
 		
 		if (isMqttClientConnected()) {
-			topicName = createTopicName(resource) + "-" +ConfigConst.SPR_ACTUATOR_NAME;
+			topicName = createTopicName(resource);
 			
 			_Logger.info("[TEST]:topicName->" + topicName );
-			this.mqttClient.subscribeToTopic(topicName, this.qosLevel);
+			this.mqttClient.subscribeToTopic(topicName + "/lv", this.qosLevel);
 			
 			success = true;
 		} else {
@@ -191,6 +197,7 @@ public class CloudClientConnector implements ICloudClient
 		return success;
 	}
 	
+	//subscribe cloud topic
 	public boolean subscribeToEdgeEvents(String topicName)
 	{
 		boolean success = false;
@@ -198,7 +205,7 @@ public class CloudClientConnector implements ICloudClient
 		if (isMqttClientConnected()) {
 			
 			_Logger.info("[TEST]:topicName->" + topicName );
-			this.mqttClient.subscribeToTopic(topicName, this.qosLevel);
+			this.mqttClient.subscribeToTopic(topicName + "lv", this.qosLevel);
 			
 			success = true;
 		} else {
@@ -208,7 +215,7 @@ public class CloudClientConnector implements ICloudClient
 		return success;
 	}
 
-
+	//unsubscribe cloud topic
 	@Override
 	public boolean unsubscribeFromEdgeEvents(ResourceNameEnum resource)
 	{
@@ -230,15 +237,16 @@ public class CloudClientConnector implements ICloudClient
 	}
 	
 	
-	// private methods
 	
+	// private methods
+	// create cloud topic name
 	private String createTopicName(ResourceNameEnum resource)
 	{
 		return this.topicPrefix + resource.getDeviceName() + "/" + resource.getResourceType();
 	}
 	
 	
-	
+	// publish message to cloud service
 	private boolean publishMessageToCloud(ResourceNameEnum resource, String itemName, String payload)
 	{
 		String topicName = createTopicName(resource) + "-" + itemName;

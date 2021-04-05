@@ -71,6 +71,8 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	
 	private String userToken;
 	
+	private DataUtil dataUtil = DataUtil.getInstance();
+	
 	// constructors
 	
 	/**
@@ -230,7 +232,7 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 		
 		// NOTE: you may want to log the exception stack trace if the call fails
 		try {
-			_Logger.info("Publishing message to topic: " + topic);
+			//_Logger.info("Publishing message to topic: " + topic);
 			
 			this.mqttClient.publish(topic, message);
 			
@@ -333,14 +335,18 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	 */
 	public void messageArrived(String topic, MqttMessage msg) throws Exception
 	{
+		ConfigUtil configUtil = ConfigUtil.getInstance();
 		String arriveMsg = msg.toString();
 		String sensorTopic = ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE.getResourceName();
 		String sysTopic = ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE.getResourceName();
 		String actuatorTopic = ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE.getResourceName();
-		String cloudTopic = "/v1.6/devices/gatewaydevice/spractuator-flag";
+		/*String cloudTopic = ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE.getResourceName();*/
+		String cloudTopic = configUtil.getProperty(ConfigConst.CLOUD_GATEWAY_SERVICE, ConfigConst.BASE_TOPIC_KEY) + ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE.getDeviceName() + "/" + ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE.getResourceType() + "/lv";
+		cloudTopic = cloudTopic.toLowerCase();
+		
+		//_Logger.info("[GDA_MQTT_CALLBACK] The function messageArrived is called + [topic]:" + topic +"&[MSG]:" + msg + ((this.dataMsgListener != null) ? "->true" : "->false"));
 		
 		_Logger.info("[GDA_MQTT_CALLBACK] The function messageArrived is called + [topic]:" + topic);
-		
 		if(this.dataMsgListener != null) {
 			
 			if(topic.equals(sensorTopic)) {
@@ -352,9 +358,12 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 			}else if(topic.equals(actuatorTopic)) {
 				ActuatorData ad = DataUtil.getInstance().jsonToActuatorData(arriveMsg);
 				this.dataMsgListener.handleActuatorCommandResponse(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, ad);
-			}else{
-				_Logger.info("[TEST====>>>>]MSG:" + msg);
-				//this.dataMsgListener.handleIncomingMessage(resourceName, msg);
+			}else if(topic.equals(cloudTopic)){
+				
+				this.dataMsgListener.handleIncomingMessage(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, arriveMsg);
+				
+				//ActuatorData ad = DataUtil.getInstance().jsonToActuatorData(arriveMsg);
+				//this.dataMsgListener.handleIncomingMessage(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE, msg);
 			}
 					
 		}

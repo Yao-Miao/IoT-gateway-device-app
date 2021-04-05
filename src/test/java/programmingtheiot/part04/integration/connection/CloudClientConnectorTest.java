@@ -106,9 +106,10 @@ public class CloudClientConnectorTest
 		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.CLOUD_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
 		
 		IDataMessageListener listener = new DefaultDataMessageListener();
+		this.cloudClient.setDataMessageListener(listener);
 		
 		assertTrue(this.cloudClient.connectClient());
-		assertTrue(this.cloudClient.subscribeToEdgeEvents(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE));
+		assertTrue(this.cloudClient.subscribeToEdgeEvents(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE));
 		
 		try {
 			Thread.sleep(5000);
@@ -117,14 +118,20 @@ public class CloudClientConnectorTest
 		}
 		
 		SensorData sensorData = new SensorData();
-		sensorData.setName(ConfigConst.TEMP_SENSOR_NAME);
-		sensorData.setValue(21.4f);
+		sensorData.setName(ConfigConst.PRESSURE_SENSOR_NAME);
+		sensorData.setValue(1421.1f);
 		
 		assertTrue(this.cloudClient.sendEdgeDataToCloud(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, sensorData));
 		
 		SystemPerformanceData sysPerfData = new SystemPerformanceData();
 		sysPerfData.setCpuUtilization(this.cpuUtilTask.getTelemetryValue());
 		sysPerfData.setMemoryUtilization(this.memUtilTask.getTelemetryValue());
+		
+		try {
+			Thread.sleep(5000);
+		} catch (Exception e) {
+			// ignore
+		}
 		
 		
 		assertTrue(this.cloudClient.sendEdgeDataToCloud(ResourceNameEnum.GDA_SYSTEM_PERF_MSG_RESOURCE, sysPerfData));
@@ -135,7 +142,7 @@ public class CloudClientConnectorTest
 			// ignore
 		}
 		
-		assertTrue(this.cloudClient.unsubscribeFromEdgeEvents(ResourceNameEnum.GDA_MGMT_STATUS_MSG_RESOURCE));
+		assertTrue(this.cloudClient.unsubscribeFromEdgeEvents(ResourceNameEnum.GDA_MGMT_STATUS_CMD_RESOURCE));
 
 		try {
 			Thread.sleep(5000);
@@ -150,6 +157,35 @@ public class CloudClientConnectorTest
 		}
 		
 		assertTrue(this.cloudClient.disconnectClient());
+	}
+	//@Test
+	public void testCloud() {
+		int qos = 2;
+		int delay = ConfigUtil.getInstance().getInteger(ConfigConst.CLOUD_GATEWAY_SERVICE, ConfigConst.KEEP_ALIVE_KEY, ConfigConst.DEFAULT_KEEP_ALIVE);
+		
+		IDataMessageListener listener = new DefaultDataMessageListener();
+		
+		assertTrue(this.cloudClient.connectClient());
+		assertTrue(this.cloudClient.subscribeToEdgeEvents("/v1.6/devices/gatewaydevice/spractuator-flag/lv"));
+		
+		try {
+			Thread.sleep(5000);
+		} catch (Exception e) {
+			// ignore
+		}
+		SensorData sensorData = new SensorData();
+		sensorData.setName(ConfigConst.PRESSURE_SENSOR_NAME);
+		sensorData.setValue(421.1f);
+		
+		assertTrue(this.cloudClient.sendEdgeDataToCloud(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, sensorData));
+		
+		try {
+			Thread.sleep(5000);
+		} catch (Exception e) {
+			// ignore
+		}
+		
+	
 	}
 	
 }

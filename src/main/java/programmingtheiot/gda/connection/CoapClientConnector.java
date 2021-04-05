@@ -246,8 +246,8 @@ public class CoapClientConnector implements IRequestResponseClient
 		if (response != null) {
 			// TODO: implement your logic here
 			
-			/*_Logger.info("Handling POST. Response: " + response.isSuccess() + " - " + response.getOptions() + " - " +
-				response.getCode() + " - " + response.getResponseText());*/
+			_Logger.info("Handling POST. Response: " + response.isSuccess() + " - " + response.getOptions() + " - " +
+				response.getCode() + " - " + response.getResponseText());
 			
 			if (this.dataMsgListener != null) {
 				// TODO: implement this

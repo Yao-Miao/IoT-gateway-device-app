@@ -60,6 +60,7 @@ public abstract class BaseSystemUtilTask
 			this.latestSensorData = this.generateTelemetry();
 		}
 		float val = this.latestSensorData.getValue();
+		this.latestSensorData = null;
 		//_Logger.info("The method <getSystemUtil> get a value: " + val);
 		return val;
 	}
